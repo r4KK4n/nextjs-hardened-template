@@ -13,7 +13,7 @@
  * - Preserves existing customizations
  */
 
-import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync, unlinkSync } from 'fs';
 import { join, dirname, sep } from 'path';
 import { fileURLToPath } from 'url';
 import { createInterface } from 'readline';
@@ -107,10 +107,10 @@ function getDefaults() {
   // Try to read package.json
   try {
     const packageJson = JSON.parse(readFileSync(join(ROOT_DIR, 'package.json'), 'utf-8'));
-    if (packageJson.name && packageJson.name !== 'PROJECT_NAME') {
+    if (packageJson.name && packageJson.name !== 'nextjs-ts-template' && packageJson.name !== 'PROJECT_NAME') {
       defaults.projectName = packageJson.name;
     }
-    if (packageJson.author && packageJson.author !== 'AUTHOR') {
+    if (packageJson.author && packageJson.author !== 'r4KK4n' && packageJson.author !== 'AUTHOR') {
       defaults.author = packageJson.author;
     }
   } catch (e) {
@@ -226,43 +226,50 @@ function findTextFiles(dir, files = []) {
 function replacePlaceholders(content, values) {
   let result = content;
 
-  // Standard placeholder format: __PLACEHOLDER__
-  const replacements = {
-    '__PROJECT_NAME__': values.projectName,
-    '__PROJECT_DISPLAY_NAME__': values.projectName
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' '),
-    '__DESCRIPTION__': values.description,
-    '__AUTHOR__': values.author,
-    '__AUTHOR_EMAIL__': values.authorEmail,
-    '__REPO_URL__': values.repoUrl,
-    '__REPO_OWNER__': values.repoOwner,
-    '__REPO_NAME__': values.repoName,
-    '__COMPANY_DOMAIN__': values.companyDomain,
-    '__SUPPORT_EMAIL__': values.supportEmail,
-    '__SECURITY_EMAIL__': values.securityEmail,
-    
-    // Legacy format (for backward compatibility)
-    'PROJECT_NAME': values.projectName,
-    'DESCRIPTION': values.description,
-    'AUTHOR': values.author,
-    'USERNAME/REPO_NAME': `${values.repoOwner}/${values.repoName}`,
-    'YOUR_DOMAIN': values.companyDomain,
-    'SUPPORT_EMAIL@example.com': values.supportEmail,
-    'SECURITY_EMAIL@example.com': values.securityEmail,
-  };
+  // Define placeholder patterns that should be replaced
+  // Using more specific patterns to avoid false positives like UNAUTHORIZED -> UNr4KK4nIZED
+  const replacements = [
+    // Standard format: __PLACEHOLDER__
+    { pattern: /__PROJECT_NAME__/g, value: values.projectName },
+    { pattern: /__DESCRIPTION__/g, value: values.description },
+    { pattern: /__AUTHOR__/g, value: values.author },
+    { pattern: /__AUTHOR_EMAIL__/g, value: values.authorEmail },
+    { pattern: /__REPO_OWNER__/g, value: values.repoOwner },
+    { pattern: /__REPO_NAME__/g, value: values.repoName },
+    { pattern: /__REPO_URL__/g, value: values.repoUrl },
+    { pattern: /__COMPANY_DOMAIN__/g, value: values.companyDomain },
+    { pattern: /__SUPPORT_EMAIL__/g, value: values.supportEmail },
+    { pattern: /__SECURITY_EMAIL__/g, value: values.securityEmail },
 
-  for (const [placeholder, value] of Object.entries(replacements)) {
-    // Use word boundaries for legacy placeholders to avoid partial replacements
-    if (placeholder.includes('_') && !placeholder.startsWith('__')) {
-      // Legacy format - be more careful
-      const regex = new RegExp(`\\b${placeholder}\\b`, 'g');
-      result = result.replace(regex, value);
-    } else {
-      // Standard format - direct replacement
-      result = result.split(placeholder).join(value);
-    }
+    // Legacy format - exact matches only (whole words or specific contexts)
+    // PROJECT_NAME in quotes or as standalone value
+    { pattern: /(['"])PROJECT_NAME\1/g, value: `$1${values.projectName}$1` },
+    { pattern: /^PROJECT_NAME$/gm, value: values.projectName },
+    { pattern: /:\s*PROJECT_NAME\s*$/gm, value: `: ${values.projectName}` },
+    
+    // DESCRIPTION in quotes or as standalone value
+    { pattern: /(['"])DESCRIPTION\1/g, value: `$1${values.description}$1` },
+    { pattern: /^DESCRIPTION$/gm, value: values.description },
+    { pattern: /:\s*DESCRIPTION\s*$/gm, value: `: ${values.description}` },
+    
+    // AUTHOR in quotes or as standalone value (but NOT in UNAUTHORIZED, AUTHOR_EMAIL, etc.)
+    { pattern: /(['"])AUTHOR\1/g, value: `$1${values.author}$1` },
+    { pattern: /^AUTHOR$/gm, value: values.author },
+    { pattern: /:\s*AUTHOR\s*$/gm, value: `: ${values.author}` },
+    { pattern: /\bAUTHOR\s*→/g, value: `${values.author} →` },
+    
+    // Repository patterns
+    { pattern: /USERNAME\/REPO_NAME/g, value: `${values.repoOwner}/${values.repoName}` },
+    { pattern: /YOUR_USERNAME\/REPO_NAME/g, value: `${values.repoOwner}/${values.repoName}` },
+    
+    // Domain and email patterns
+    { pattern: /\bYOUR_DOMAIN\b/g, value: values.companyDomain },
+    { pattern: /\bSUPPORT_EMAIL@example\.com\b/g, value: values.supportEmail },
+    { pattern: /\bSECURITY_EMAIL@example\.com\b/g, value: values.securityEmail },
+  ];
+
+  for (const { pattern, value } of replacements) {
+    result = result.replace(pattern, value);
   }
 
   return result;
@@ -337,14 +344,64 @@ function saveState(values) {
 }
 
 /**
+ * Update git remote to use correct repository URL
+ */
+function updateGitRemote(values) {
+  try {
+    // Check if git is available
+    try {
+      execSync('git --version', { stdio: 'ignore' });
+    } catch {
+      log.warn('Git not found, skipping remote update');
+      return;
+    }
+
+    // Check if we're in a git repository
+    try {
+      execSync('git rev-parse --git-dir', { stdio: 'ignore' });
+    } catch {
+      log.warn('Not a git repository, skipping remote update');
+      return;
+    }
+
+    // Get current remote URL
+    let currentRemote = '';
+    try {
+      currentRemote = execSync('git remote get-url origin', { encoding: 'utf-8' }).trim();
+    } catch {
+      // No remote configured yet
+    }
+
+    const newRemote = values.repoUrl;
+
+    // Only update if the remote contains placeholder or doesn't exist
+    if (!currentRemote || currentRemote.includes('YOUR_USERNAME') || currentRemote.includes('USERNAME')) {
+      try {
+        if (currentRemote) {
+          execSync(`git remote set-url origin ${newRemote}`, { stdio: 'ignore' });
+          log.success(`Updated git remote: ${newRemote}`);
+        } else {
+          execSync(`git remote add origin ${newRemote}`, { stdio: 'ignore' });
+          log.success(`Added git remote: ${newRemote}`);
+        }
+      } catch (error) {
+        log.warn(`Could not update git remote: ${error.message}`);
+      }
+    } else {
+      log.info(`Git remote already configured: ${currentRemote}`);
+    }
+  } catch (error) {
+    log.warn(`Error updating git remote: ${error.message}`);
+  }
+}
+
+/**
  * Remove UNINITIALIZED marker
  */
 function removeMarker() {
   try {
     if (existsSync(UNINITIALIZED_MARKER)) {
-      // On Windows, we need to use unlinkSync
-      const fs = await import('fs');
-      fs.unlinkSync(UNINITIALIZED_MARKER);
+      unlinkSync(UNINITIALIZED_MARKER);
       log.success('Removed UNINITIALIZED marker');
     }
   } catch (error) {
@@ -412,11 +469,14 @@ async function main() {
     // Create environment file
     createEnvFile();
 
+    // Update git remote
+    updateGitRemote(values);
+
     // Save state
     saveState(values);
 
     // Remove marker
-    await removeMarker();
+    removeMarker();
 
     // Show next steps
     showNextSteps();

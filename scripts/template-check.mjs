@@ -59,11 +59,12 @@ const PLACEHOLDER_PATTERNS = [
   // Standard format
   /__[A-Z_]+__/g,
   
-  // Legacy placeholders (as whole words)
+  // Legacy placeholders (as whole words) - only actual placeholders, not example values
   /\bPROJECT_NAME\b/g,
   /\bDESCRIPTION\b/g,
   /\bAUTHOR\b/g,
   /\bUSERNAME\/REPO_NAME\b/g,
+  /\bYOUR_USERNAME\/REPO_NAME\b/g,
   /\bYOUR_DOMAIN\b/g,
   /\bSUPPORT_EMAIL@example\.com\b/g,
   /\bSECURITY_EMAIL@example\.com\b/g,
