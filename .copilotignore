@@ -1,0 +1,29 @@
+# GitHub Copilot Ignore
+# Files and folders to exclude from Copilot context
+
+# Dependencies
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# Generated files
+*.log
+.DS_Store
+coverage/
+.turbo/
+
+# Environment files (sensitive)
+.env
+.env.local
+.env.production
+.env.development
+
+# Lock files (too large)
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Git
+.git/
