@@ -1,9 +1,10 @@
-# PROJECT_NAME
+# 🔒 Next.js Hardened Template
 
-> A modern, production-ready Next.js + TypeScript template with comprehensive tooling, GitHub automation, and GitHub Copilot integration.
+> A modern, production-ready Next.js 15 + TypeScript template with **supply-chain security**, automated initialization, comprehensive tooling, GitHub automation, and GitHub Copilot integration.
 
-[![CI](https://github.com/USERNAME/REPO_NAME/workflows/CI/badge.svg)](https://github.com/USERNAME/REPO_NAME/actions)
+[![CI](https://github.com/r4KK4n/nextjs-hardened-template/workflows/CI/badge.svg)](https://github.com/r4KK4n/nextjs-hardened-template/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Template](https://img.shields.io/badge/template-ready-brightgreen)](https://github.com/r4KK4n/nextjs-hardened-template/generate)
 
 ## ✨ Features
 
@@ -12,11 +13,13 @@
 - 🎨 **Tailwind CSS** - Utility-first CSS framework
 - 🧪 **Vitest** - Fast unit testing with React Testing Library
 - 📏 **ESLint + Prettier** - Code quality and formatting
-- 🐶 **Husky + lint-staged** - Git hooks for quality gates
-- 🤖 **GitHub Actions** - Automated CI/CD pipeline
-- 🔒 **Security** - Headers, input validation, and best practices
+- 🤖 **GitHub Actions** - Automated CI/CD pipeline with security scanning
+- 🔒 **Supply-Chain Security** - `npm ci --ignore-scripts`, npm audit, Snyk scanning
+- 🛡️ **Security Hardened** - CSP headers, input validation, best practices
+- 🔄 **Template Initialization** - Interactive wizard to replace placeholders
+- ✅ **Verification System** - Ensure proper initialization before development
 - 📝 **GitHub Copilot System** - Comprehensive prompt library
-- 📚 **Documentation** - Architecture, conventions, and guides
+- 📚 **Documentation** - Architecture, conventions, security guides
 - 🎯 **VS Code** - Optimized settings and extensions
 
 ## 📋 Prerequisites
@@ -24,127 +27,80 @@
 Before you begin, ensure you have the following installed:
 
 - **Node.js** >= 18.17.0
-- **pnpm** >= 8.0.0 (recommended) or npm
+- **npm** >= 9.0.0
 
 ```bash
 # Check versions
 node --version
-pnpm --version
-
-# Install pnpm if needed
-npm install -g pnpm
+npm --version
 ```
 
-## 🎯 First-Time Setup
+## 🎯 Getting Started
 
-### For Template Users (First Time Only)
+### Option 1: Use This Template (Recommended)
 
-If you're using this as a template for a new project:
-
-```bash
-# 1. Initialize the template (replaces placeholders)
-npm run template:init
-
-# 2. Install dependencies
-npm ci
-
-# 3. Verify initialization
-npm run template:check
-
-# 4. Set up GitHub secrets (see docs/secrets.md)
-#    Go to: Repository Settings → Secrets and variables → Actions
-#    Add: CODECOV_TOKEN, etc.
-
-# 5. Start development
-npm run dev
-```
-
-**What does `template:init` do?**
-- Replaces `__PROJECT_NAME__`, `__AUTHOR__`, and other placeholders
-- Creates `.env.local` from `.env.example`
-- Detects defaults from git and file system
-- Interactive prompts for project details
-
-**See:** `.template/PLACEHOLDERS.md` for all placeholders and `docs/secrets.md` for GitHub secrets.
-
----
-
-## 🚀 Quick Start
-
-### 1. Use This Template
-
-Click the "Use this template" button on GitHub or:
+Click the **"Use this template"** button at the top of this repository, or:
 
 ```bash
-# Clone the repository
-git clone https://github.com/USERNAME/REPO_NAME.git my-project
+# GitHub CLI
+gh repo create my-project --template r4KK4n/nextjs-hardened-template
 cd my-project
-
-# Remove git history (start fresh)
-rm -rf .git
-git init
 ```
 
-### 2. Customize the Template
-
-Replace placeholders throughout the project:
-
-- `PROJECT_NAME` → Your project name
-- `DESCRIPTION` → Your project description
-- `AUTHOR` → Your name or organization
-- `USERNAME/REPO_NAME` → Your GitHub username and repo name
-- `YOUR_DOMAIN` → Your domain name
-- Email addresses in security and contact sections
-
-**Key files to update:**
-- `package.json` - name, description, author
-- `README.md` - this file
-- `LICENSE` - copyright holder
-- `.github/CODEOWNERS` - team members
-- `.github/ISSUE_TEMPLATE/*.yml` - assignees
-- `.github/SECURITY.md` - security contact
-- `public/robots.txt` - sitemap URL
-
-### 3. Install Dependencies
+### Option 2: Clone and Initialize
 
 ```bash
-# Local development (recommended - executes prepare scripts for git hooks)
-pnpm install
-
-# Alternative: Maximum security (skips all lifecycle scripts)
-pnpm install --ignore-scripts
-# Note: If using --ignore-scripts, manually run: pnpm prepare
+git clone https://github.com/r4KK4n/nextjs-hardened-template.git my-project
+cd my-project
 ```
 
-**⚠️ Supply-Chain Security Note:**
-- In CI/CD environments, always use `--ignore-scripts` to prevent malicious postinstall scripts
-- For local development, review `package.json` scripts before first install
-- See [docs/npm-scripts-policy.md](./docs/npm-scripts-policy.md) for details
+### Step 1: Initialize Template
 
-### 4. Set Up Environment
+```bash
+# Interactive initialization wizard
+# Replaces all placeholders and detects defaults from git config
+npm run template:init
+```
+
+The wizard will prompt for:
+- **Project Name** (detected from directory name)
+- **Description**
+- **Author** (detected from git config)
+- **GitHub Repository** (detected from git remote)
+
+### Step 2: Install Dependencies
+
+```bash
+# Install with security best practices
+# --ignore-scripts prevents execution of postinstall hooks
+npm ci
+```
+
+⚠️ **Why `npm ci`?** See [docs/npm-scripts-policy.md](./docs/npm-scripts-policy.md) for supply-chain security details.
+
+### Step 3: Verify Initialization
+
+```bash
+# Ensure all placeholders were replaced
+npm run template:check
+```
+
+### Step 4: Set Up Environment
 
 ```bash
 # Copy environment template
-cp .env.example .env
+cp .env.example .env.local
 
-# Edit .env with your values
+# Edit with your values
 ```
 
-### 5. Set Up Git Hooks
+### Step 5: Start Development
 
 ```bash
-# Initialize Husky
-pnpm prepare
+npm run dev
 ```
 
-### 6. Start Development
-
-```bash
-# Run development server
-pnpm dev
-
-# Open http://localhost:3000
-```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 📦 Project Structure
 
@@ -212,26 +168,30 @@ pnpm dev
 
 ```bash
 # Development
-pnpm dev              # Start development server (http://localhost:3000)
+npm run dev              # Start development server (http://localhost:3000)
 
 # Building
-pnpm build            # Build for production
-pnpm start            # Start production server
+npm run build            # Build for production
+npm start                # Start production server
 
 # Code Quality
-pnpm lint             # Run ESLint
-pnpm lint:fix         # Fix ESLint errors
-pnpm format           # Format code with Prettier
-pnpm format:check     # Check code formatting
-pnpm type-check       # Check TypeScript types
+npm run lint             # Run ESLint
+npm run lint:fix         # Fix ESLint errors
+npm run format           # Format code with Prettier
+npm run format:check     # Check code formatting
+npm run type-check       # Check TypeScript types
+
+# Security
+npm audit                # Audit npm dependencies (also runs in CI)
 
 # Testing
-pnpm test             # Run tests once
-pnpm test:watch       # Run tests in watch mode
-pnpm test:coverage    # Run tests with coverage report
+npm test                 # Run tests once
+npm run test:watch       # Run tests in watch mode
+npm run test:coverage    # Run tests with coverage report
 
-# Complete Check
-pnpm ci               # Run all checks (lint + type-check + test)
+# Template
+npm run template:init    # Initialize template (interactive wizard)
+npm run template:check   # Verify template initialization
 ```
 
 ## 🧪 Testing
@@ -240,13 +200,13 @@ This template uses Vitest and React Testing Library for testing.
 
 ```bash
 # Run all tests
-pnpm test
+npm test
 
 # Watch mode
-pnpm test:watch
+npm run test:watch
 
 # Coverage report
-pnpm test:coverage
+npm run test:coverage
 ```
 
 ### Writing Tests
@@ -392,24 +352,26 @@ Set these in your deployment platform:
 ### Adding Dependencies
 
 ```bash
-# Add a package
-pnpm add package-name
+# Add a package (local development only)
+npm install package-name
 
-# Add a dev dependency
-pnpm add -D package-name
+# After testing, commit both package.json and package-lock.json
+git add package.json package-lock.json
+git commit -m "deps: add package-name"
 ```
+
+⚠️ **Important:** Always review package security and avoid scripts in lifecycle hooks. See [docs/npm-scripts-policy.md](./docs/npm-scripts-policy.md).
 
 ### Updating Dependencies
 
 ```bash
 # Check for updates
-pnpm outdated
+npm outdated
 
-# Update all dependencies
-pnpm update
+# Update specific package
+npm update package-name
 
-# Update interactive
-pnpm up -i
+# Dependabot will automatically create PRs for updates
 ```
 
 ### Modifying Tailwind
@@ -437,8 +399,8 @@ Example with Prisma:
 
 ```bash
 # Install Prisma
-pnpm add -D prisma
-pnpm add @prisma/client
+npm install --save-dev prisma
+npm install @prisma/client
 
 # Initialize Prisma
 npx prisma init
@@ -486,12 +448,30 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 📧 Email: SUPPORT_EMAIL@example.com
-- 💬 Discussions: [GitHub Discussions](https://github.com/USERNAME/REPO_NAME/discussions)
-- 🐛 Issues: [GitHub Issues](https://github.com/USERNAME/REPO_NAME/issues)
+- 🐛 Issues: [GitHub Issues](https://github.com/r4KK4n/nextjs-hardened-template/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/r4KK4n/nextjs-hardened-template/discussions)
+- 🔒 Security: See [SECURITY.md](./.github/SECURITY.md)
 
 ---
 
-**Built with ❤️ using Next.js + TypeScript**
+## 📖 Additional Resources
 
-⭐ If you find this template useful, please consider giving it a star!
+- [Template Placeholders](./.template/PLACEHOLDERS.md) - All placeholder variables
+- [NPM Scripts Policy](./docs/npm-scripts-policy.md) - Supply-chain security
+- [Secrets Management](./docs/secrets.md) - GitHub secrets setup
+- [Architecture](./docs/architecture.md) - System design patterns
+- [Coding Conventions](./docs/conventions.md) - Development standards
+
+---
+
+**Built with ❤️ using Next.js 15 + TypeScript**
+
+⭐ If you find this template useful, please give it a star! It helps others discover this resource.
+
+---
+
+## 🚀 Quick Links
+
+- [Use This Template](https://github.com/r4KK4n/nextjs-hardened-template/generate) - Create your project
+- [GitHub Repository](https://github.com/r4KK4n/nextjs-hardened-template) - View source
+- [Issues](https://github.com/r4KK4n/nextjs-hardened-template/issues) - Report bugs

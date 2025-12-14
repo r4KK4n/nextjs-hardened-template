@@ -4,27 +4,13 @@
 # review when someone opens a pull request.
 
 # Global owners
-* @OWNER_GITHUB_USERNAME
-
-# Frontend components
-/src/components/ @FRONTEND_TEAM_USERNAME
-
-# API routes
-/src/app/api/ @BACKEND_TEAM_USERNAME
-
-# Configuration files
-*.config.* @DEVOPS_TEAM_USERNAME
-.github/ @DEVOPS_TEAM_USERNAME
-
-# Documentation
-/docs/ @DOCS_TEAM_USERNAME
-*.md @DOCS_TEAM_USERNAME
+* @r4KK4n
 
 # Protected infrastructure files (require review)
-.github/workflows/** @DEVOPS_TEAM_USERNAME
-.github/copilot-instructions.md @DEVOPS_TEAM_USERNAME
-.github/prompts/** @DEVOPS_TEAM_USERNAME
-.vscode/** @DEVOPS_TEAM_USERNAME
-scripts/** @DEVOPS_TEAM_USERNAME
-docs/npm-scripts-policy.md @DEVOPS_TEAM_USERNAME
-docs/secrets.md @DEVOPS_TEAM_USERNAME
+.github/workflows/** @r4KK4n
+.github/copilot-instructions.md @r4KK4n
+.github/copilot/ @r4KK4n
+.vscode/** @r4KK4n
+scripts/** @r4KK4n
+docs/npm-scripts-policy.md @r4KK4n
+docs/secrets.md @r4KK4n
