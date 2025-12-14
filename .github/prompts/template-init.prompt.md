@@ -26,6 +26,7 @@ npm run template:check
 ```
 
 **Expected output if uninitialized:**
+
 - Error: "Template is not initialized!"
 - Marker file: `.template/UNINITIALIZED` exists
 
@@ -37,6 +38,7 @@ npm run template:init
 ```
 
 The wizard will:
+
 - Detect default values from git, file system, and package.json
 - Prompt for project information (press Enter to accept defaults)
 - Replace all placeholders throughout the repository
@@ -48,19 +50,20 @@ The wizard will:
 
 The wizard asks for:
 
-| Prompt | Description | Example |
-|--------|-------------|---------|
-| **Project name** | Kebab-case identifier | `my-awesome-app` |
-| **Description** | Short project description | `A modern Next.js application` |
-| **Author name** | Your name or organization | `Jane Doe` or `Acme Corp` |
-| **Author email** | Contact email | `jane@example.com` |
-| **GitHub username/org** | Repository owner | `janedoe` or `acme` |
-| **Repository name** | Repository identifier | `my-awesome-app` |
-| **Company domain** | Primary domain | `example.com` |
-| **Support email** | Support contact | `support@example.com` |
-| **Security email** | Security contact | `security@example.com` |
+| Prompt                  | Description               | Example                        |
+| ----------------------- | ------------------------- | ------------------------------ |
+| **Project name**        | Kebab-case identifier     | `my-awesome-app`               |
+| **Description**         | Short project description | `A modern Next.js application` |
+| **Author name**         | Your name or organization | `Jane Doe` or `Acme Corp`      |
+| **Author email**        | Contact email             | `jane@example.com`             |
+| **GitHub username/org** | Repository owner          | `janedoe` or `acme`            |
+| **Repository name**     | Repository identifier     | `my-awesome-app`               |
+| **Company domain**      | Primary domain            | `example.com`                  |
+| **Support email**       | Support contact           | `support@example.com`          |
+| **Security email**      | Security contact          | `security@example.com`         |
 
 **Tips:**
+
 - Press **Enter** to accept default values (shown in cyan)
 - Defaults are detected from git config, directory name, and package.json
 - You can re-run initialization by manually creating `.template/UNINITIALIZED`
@@ -73,6 +76,7 @@ npm ci
 ```
 
 **⚠️ Important:**
+
 - **ALWAYS use `npm ci`** (not `npm install`)
 - This ensures reproducible builds using the lockfile
 - See `docs/npm-scripts-policy.md` for security rationale
@@ -85,12 +89,14 @@ npm run template:check
 ```
 
 **Expected output:**
+
 - ✓ Initialization marker removed
 - ✓ Found: package.json, README.md, etc.
 - ✓ No placeholders found
 - All checks passed!
 
 If checks fail:
+
 - Review listed files with remaining placeholders
 - Manually replace any missed placeholders
 - Run `npm run template:check` again
@@ -140,6 +146,7 @@ git push origin main
 See `.template/PLACEHOLDERS.md` for complete list of placeholders and their meanings.
 
 **Common placeholders:**
+
 - `__PROJECT_NAME__` - Project identifier (kebab-case)
 - `__DESCRIPTION__` - Project description
 - `__AUTHOR__` - Author name
@@ -147,6 +154,7 @@ See `.template/PLACEHOLDERS.md` for complete list of placeholders and their mean
 - `__COMPANY_DOMAIN__` - Primary domain name
 
 **Legacy format (also replaced):**
+
 - `PROJECT_NAME`
 - `DESCRIPTION`
 - `AUTHOR`
@@ -191,12 +199,14 @@ npm run build
 ## Supply-Chain Security Reminders
 
 **✅ Always:**
+
 - Use `npm ci` for dependency installation
 - Use `npm ci --ignore-scripts` in CI/CD
 - Review packages before adding: `npm show <package> scripts`
 - Keep lockfile committed and up-to-date
 
 **❌ Never:**
+
 - Use `npm install` (except when adding new packages locally)
 - Add packages with postinstall/preinstall scripts without review
 - Commit secrets to git
@@ -227,6 +237,7 @@ The check script found unreplaced placeholders:
 3. Run `npm run template:check` again
 
 Common causes:
+
 - Binary files (ignored)
 - Files in excluded directories (node_modules, .git)
 - Custom placeholders not in standard format
@@ -240,6 +251,7 @@ npm ci
 ```
 
 If issues persist:
+
 - Check Node.js version: `node --version` (need >= 18.17.0)
 - Check npm version: `npm --version` (need >= 9.0.0)
 - Review error messages for specific package issues
@@ -294,6 +306,7 @@ git push
 ## Support
 
 For help with initialization:
+
 - Review this prompt
 - Check `.template/PLACEHOLDERS.md`
 - See `docs/secrets.md` for GitHub secrets

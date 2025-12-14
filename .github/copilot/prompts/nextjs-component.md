@@ -1,9 +1,11 @@
 # Copilot Prompt: Next.js Component
 
 ## Context
+
 Create a new React component for the Next.js application following project standards and best practices.
 
 ## When to Use
+
 - Creating new UI components
 - Building reusable component libraries
 - Implementing feature-specific components
@@ -47,7 +49,7 @@ Create a new React component for the Next.js application following project stand
 
 ## Output Format
 
-```typescript
+````typescript
 import { ReactNode } from 'react';
 
 interface ComponentNameProps {
@@ -61,7 +63,7 @@ interface ComponentNameProps {
 
 /**
  * Component description
- * 
+ *
  * @example
  * ```tsx
  * <ComponentName propName="value">
@@ -75,14 +77,14 @@ export function ComponentName({
   className = '',
 }: ComponentNameProps) {
   // Component logic
-  
+
   return (
     <div className={`base-styles ${className}`}>
       {children}
     </div>
   );
 }
-```
+````
 
 ## Do's
 
@@ -112,7 +114,7 @@ export function ComponentName({
 
 ## Example
 
-```typescript
+````typescript
 import { ReactNode } from 'react';
 
 interface AlertProps {
@@ -140,7 +142,7 @@ interface AlertProps {
 
 /**
  * Alert component for displaying notifications and messages
- * 
+ *
  * @example
  * ```tsx
  * <Alert variant="success" title="Success">
@@ -174,7 +176,7 @@ export function Alert({
           )}
           <div className="text-sm">{children}</div>
         </div>
-        
+
         {onDismiss && (
           <button
             onClick={onDismiss}
@@ -188,7 +190,7 @@ export function Alert({
     </div>
   );
 }
-```
+````
 
 ## Checklist
 
@@ -204,6 +206,7 @@ export function Alert({
 - [ ] Component is reusable
 
 ## Related Prompts
+
 - `api-route.md` - For API endpoints
 - `unit-tests.md` - For testing components
 - `refactor.md` - For improving existing components

@@ -31,16 +31,20 @@ class Logger {
     switch (level) {
       case 'debug':
         if (this.isDevelopment) {
+          // eslint-disable-next-line no-console
           console.log(formattedMessage, data ?? '');
         }
         break;
       case 'info':
+        // eslint-disable-next-line no-console
         console.log(formattedMessage, data ?? '');
         break;
       case 'warn':
+        // eslint-disable-next-line no-console
         console.warn(formattedMessage, data ?? '');
         break;
       case 'error':
+        // eslint-disable-next-line no-console
         console.error(formattedMessage, data ?? '');
         break;
     }

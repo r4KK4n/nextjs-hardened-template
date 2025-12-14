@@ -1,9 +1,11 @@
 # Copilot Prompt: Documentation
 
 ## Context
+
 Create clear, comprehensive, and maintainable documentation for code, APIs, and features.
 
 ## When to Use
+
 - Documenting new features
 - Creating API documentation
 - Writing user guides
@@ -13,79 +15,75 @@ Create clear, comprehensive, and maintainable documentation for code, APIs, and 
 ## Types of Documentation
 
 ### Code Comments
-```typescript
+
+````typescript
 /**
  * Calculates the total price including tax and discounts
- * 
+ *
  * @param basePrice - The original price before modifications
  * @param taxRate - Tax rate as decimal (e.g., 0.1 for 10%)
  * @param discountPercent - Discount percentage (e.g., 20 for 20% off)
  * @returns The final calculated price
- * 
+ *
  * @example
  * ```typescript
  * const total = calculateTotal(100, 0.1, 20);
  * // Returns: 88 (100 - 20% discount + 10% tax)
  * ```
  */
-function calculateTotal(
-  basePrice: number,
-  taxRate: number,
-  discountPercent: number
-): number {
+function calculateTotal(basePrice: number, taxRate: number, discountPercent: number): number {
   const discountAmount = basePrice * (discountPercent / 100);
   const subtotal = basePrice - discountAmount;
   const tax = subtotal * taxRate;
   return subtotal + tax;
 }
-```
+````
 
 ### API Documentation
-```typescript
+
+````typescript
 /**
  * GET /api/users/[id]
- * 
+ *
  * Retrieves a user by their ID
- * 
+ *
  * @route GET /api/users/:id
  * @access Private
  * @auth Required
- * 
+ *
  * @param {string} id - User ID (UUID format)
- * 
+ *
  * @returns {200} User object
  * @returns {401} Unauthorized - No valid session
  * @returns {404} User not found
  * @returns {500} Internal server error
- * 
+ *
  * @example
  * ```typescript
  * const response = await fetch('/api/users/123e4567-e89b-12d3-a456-426614174000');
  * const user = await response.json();
  * ```
  */
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   // Implementation
 }
-```
+````
 
 ### Component Documentation
-```typescript
+
+````typescript
 /**
  * A reusable button component with multiple variants and sizes
- * 
+ *
  * @component
- * 
+ *
  * @example
  * ```tsx
  * // Basic usage
  * <Button onClick={handleClick}>
  *   Click me
  * </Button>
- * 
+ *
  * // With variant and size
  * <Button variant="primary" size="lg" disabled={isLoading}>
  *   {isLoading ? 'Loading...' : 'Submit'}
@@ -120,7 +118,7 @@ export function Button({
 }: ButtonProps) {
   // Implementation
 }
-```
+````
 
 ## README Structure
 
@@ -152,16 +150,21 @@ Brief description of what this project does and who it's for.
 ### Installation
 
 \`\`\`bash
+
 # Clone the repository
+
 git clone https://github.com/username/repo-name.git
 
 # Install dependencies
+
 pnpm install
 
 # Copy environment variables
+
 cp .env.example .env
 
 # Run development server
+
 pnpm dev
 \`\`\`
 
@@ -177,11 +180,11 @@ See `.env.example` for required variables:
 
 \`\`\`
 src/
-├── app/          # Next.js App Router
-├── components/   # React components
-├── lib/          # Utility functions
-├── types/        # TypeScript types
-└── styles/       # Global styles
+├── app/ # Next.js App Router
+├── components/ # React components
+├── lib/ # Utility functions
+├── types/ # TypeScript types
+└── styles/ # Global styles
 \`\`\`
 
 ## Available Scripts
@@ -219,7 +222,7 @@ All API endpoints require authentication using JWT tokens.
 
 \`\`\`typescript
 headers: {
-  'Authorization': 'Bearer YOUR_TOKEN_HERE'
+'Authorization': 'Bearer YOUR_TOKEN_HERE'
 }
 \`\`\`
 
@@ -238,16 +241,18 @@ Retrieves a user by ID.
 **Permissions required**: None
 
 **URL Parameters**:
+
 - `id` (string, required) - User ID
 
 **Success Response**:
+
 - **Code**: 200
 - **Content**:
   \`\`\`json
   {
-    "id": "123",
-    "name": "John Doe",
-    "email": "john@example.com"
+  "id": "123",
+  "name": "John Doe",
+  "email": "john@example.com"
   }
   \`\`\`
 
@@ -256,23 +261,23 @@ Retrieves a user by ID.
 - **Code**: 401 UNAUTHORIZED
   \`\`\`json
   {
-    "error": "Authentication required"
+  "error": "Authentication required"
   }
   \`\`\`
 
 - **Code**: 404 NOT FOUND
   \`\`\`json
   {
-    "error": "User not found"
+  "error": "User not found"
   }
   \`\`\`
 
 **Example**:
 \`\`\`typescript
 const response = await fetch('/api/users/123', {
-  headers: {
-    'Authorization': `Bearer ${token}`
-  }
+headers: {
+'Authorization': `Bearer ${token}`
+}
 });
 const user = await response.json();
 \`\`\`
@@ -290,21 +295,25 @@ This application follows a modular architecture with clear separation of concern
 ## Layers
 
 ### Presentation Layer (Components)
+
 - React components in `/src/components`
 - Handles UI rendering and user interactions
 - Should be pure and reusable when possible
 
 ### Application Layer (App Router)
+
 - Pages and routes in `/src/app`
 - Server and Client Components
 - Route handlers for API endpoints
 
 ### Business Logic Layer (Lib)
+
 - Utility functions in `/src/lib`
 - Business logic and data transformations
 - Independent of framework
 
 ### Data Access Layer
+
 - Database queries
 - External API calls
 - Data validation
@@ -322,16 +331,19 @@ This application follows a modular architecture with clear separation of concern
 ## Key Decisions
 
 ### Why Next.js App Router?
+
 - Server Components for better performance
 - Built-in routing and layouts
 - Streaming and Suspense support
 
 ### Why Vitest over Jest?
+
 - Faster test execution
 - Better ESM support
 - Native TypeScript support
 
 ### Why Tailwind CSS?
+
 - Utility-first approach
 - Consistent design system
 - Small bundle size with purging
@@ -384,11 +396,13 @@ This application follows a modular architecture with clear separation of concern
 
 ```markdown
 # H1 Title
+
 ## H2 Heading
+
 ### H3 Subheading
 
 **Bold text**
-*Italic text*
+_Italic text_
 `inline code`
 
 - Unordered list item
@@ -409,7 +423,7 @@ const example = 'value';
 \`\`\`
 
 | Column 1 | Column 2 |
-|----------|----------|
+| -------- | -------- |
 | Value 1  | Value 2  |
 ```
 
@@ -427,6 +441,7 @@ const example = 'value';
 - [ ] Documentation is up to date
 
 ## Related Prompts
+
 - `nextjs-component.md` - For component documentation
 - `api-route.md` - For API documentation
 - `code-review.md` - For documentation review

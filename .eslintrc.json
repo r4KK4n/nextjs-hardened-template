@@ -1,9 +1,5 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "next/typescript",
-    "prettier"
-  ],
+  "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
   "rules": {
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "prefer-const": "error",

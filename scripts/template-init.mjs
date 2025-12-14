@@ -2,10 +2,10 @@
 
 /**
  * Template Initialization Wizard
- * 
+ *
  * This script guides users through initializing a fresh clone of the template repository.
  * It replaces placeholders, creates environment files, and marks the template as initialized.
- * 
+ *
  * Features:
  * - Idempotent (safe to run multiple times)
  * - Cross-platform (Windows/macOS/Linux)
@@ -13,7 +13,15 @@
  * - Preserves existing customizations
  */
 
-import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync, unlinkSync } from 'fs';
+import {
+  readFileSync,
+  writeFileSync,
+  existsSync,
+  readdirSync,
+  statSync,
+  mkdirSync,
+  unlinkSync,
+} from 'fs';
 import { join, dirname, sep } from 'path';
 import { fileURLToPath } from 'url';
 import { createInterface } from 'readline';
@@ -48,7 +56,18 @@ const STATE_FILE = join(ROOT_DIR, '.template', 'state.json');
 const PLACEHOLDERS_FILE = join(ROOT_DIR, '.template', 'PLACEHOLDERS.md');
 
 // File extensions to process
-const TEXT_EXTENSIONS = ['.md', '.txt', '.json', '.yml', '.yaml', '.ts', '.tsx', '.js', '.mjs', '.css'];
+const TEXT_EXTENSIONS = [
+  '.md',
+  '.txt',
+  '.json',
+  '.yml',
+  '.yaml',
+  '.ts',
+  '.tsx',
+  '.js',
+  '.mjs',
+  '.css',
+];
 
 // Directories to exclude from scanning
 const EXCLUDE_DIRS = ['node_modules', '.git', '.next', 'dist', 'build', 'out', 'coverage'];
@@ -86,10 +105,13 @@ function getDefaults() {
 
   // Try to get git remote URL
   try {
-    const remoteUrl = execSync('git remote get-url origin', { cwd: ROOT_DIR, encoding: 'utf-8' }).trim();
+    const remoteUrl = execSync('git remote get-url origin', {
+      cwd: ROOT_DIR,
+      encoding: 'utf-8',
+    }).trim();
     if (remoteUrl) {
       defaults.repoUrl = remoteUrl;
-      
+
       // Parse GitHub URL
       const githubMatch = remoteUrl.match(/github\.com[:/]([^/]+)\/([^/.]+)/);
       if (githubMatch) {
@@ -205,12 +227,12 @@ function findTextFiles(dir, files = []) {
     const relativePath = fullPath.replace(ROOT_DIR + sep, '');
 
     // Skip excluded directories
-    if (EXCLUDE_DIRS.some(excluded => relativePath.startsWith(excluded))) {
+    if (EXCLUDE_DIRS.some((excluded) => relativePath.startsWith(excluded))) {
       continue;
     }
 
     const stat = statSync(fullPath);
-    
+
     if (stat.isDirectory()) {
       findTextFiles(fullPath, files);
     } else if (stat.isFile() && shouldProcessFile(fullPath)) {
@@ -245,17 +267,17 @@ function replacePlaceholders(content, values) {
     // Legacy format - with word boundaries to avoid partial matches
     // PROJECT_NAME: as whole word only
     { pattern: /\bPROJECT_NAME\b/g, value: values.projectName },
-    
+
     // DESCRIPTION: as whole word only
     { pattern: /\bDESCRIPTION\b/g, value: values.description },
-    
+
     // AUTHOR: only as standalone word, NOT part of UNAUTHORIZED
     { pattern: /\bAUTHOR\b(?!IZED)/g, value: values.author },
-    
+
     // Repository patterns
     { pattern: /USERNAME\/REPO_NAME/g, value: `${values.repoOwner}/${values.repoName}` },
     { pattern: /YOUR_USERNAME\/REPO_NAME/g, value: `${values.repoOwner}/${values.repoName}` },
-    
+
     // Domain and email patterns
     { pattern: /\bYOUR_DOMAIN\b/g, value: values.companyDomain },
     { pattern: /\bSUPPORT_EMAIL@example\.com\b/g, value: values.supportEmail },
@@ -369,7 +391,11 @@ function updateGitRemote(values) {
     const newRemote = values.repoUrl;
 
     // Only update if the remote contains placeholder or doesn't exist
-    if (!currentRemote || currentRemote.includes('YOUR_USERNAME') || currentRemote.includes('USERNAME')) {
+    if (
+      !currentRemote ||
+      currentRemote.includes('YOUR_USERNAME') ||
+      currentRemote.includes('USERNAME')
+    ) {
       try {
         if (currentRemote) {
           execSync(`git remote set-url origin ${newRemote}`, { stdio: 'ignore' });
@@ -425,9 +451,13 @@ function showNextSteps() {
   console.log(`  5. Start development:`);
   console.log(`     ${colors.cyan}npm run dev${colors.reset}\n`);
   console.log(`${colors.bright}Important:${colors.reset}`);
-  console.log(`  • Never use ${colors.red}npm install${colors.reset} - always use ${colors.green}npm ci${colors.reset}`);
+  console.log(
+    `  • Never use ${colors.red}npm install${colors.reset} - always use ${colors.green}npm ci${colors.reset}`
+  );
   console.log(`  • In CI, use: ${colors.green}npm ci --ignore-scripts${colors.reset}`);
-  console.log(`  • See ${colors.cyan}docs/npm-scripts-policy.md${colors.reset} for security guidelines\n`);
+  console.log(
+    `  • See ${colors.cyan}docs/npm-scripts-policy.md${colors.reset} for security guidelines\n`
+  );
 }
 
 /**
@@ -438,7 +468,9 @@ async function main() {
     // Check if already initialized
     if (isInitialized()) {
       log.info('Template is already initialized.');
-      log.info(`To re-initialize, delete ${colors.cyan}.template/UNINITIALIZED${colors.reset} and run again.`);
+      log.info(
+        `To re-initialize, delete ${colors.cyan}.template/UNINITIALIZED${colors.reset} and run again.`
+      );
       log.info(`Current state: ${colors.cyan}.template/state.json${colors.reset}\n`);
       process.exit(0);
     }
@@ -474,7 +506,6 @@ async function main() {
 
     // Show next steps
     showNextSteps();
-
   } catch (error) {
     log.error(`Initialization failed: ${error.message}`);
     console.error(error);

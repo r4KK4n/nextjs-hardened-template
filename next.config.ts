@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
   poweredByHeader: false,
-  
+
   // Security headers
   async headers() {
     return [

@@ -42,6 +42,7 @@ This application follows a modular, layer-based architecture optimized for Next.
 Located in `/src/components/`
 
 #### UI Components (`/src/components/ui/`)
+
 - Basic, reusable UI elements
 - No business logic
 - Accept data via props
@@ -55,6 +56,7 @@ export function Button({ children, onClick }: ButtonProps) {
 ```
 
 #### Feature Components (`/src/components/features/`)
+
 - Feature-specific compositions
 - May contain feature logic
 - Examples: UserProfile, PostEditor, CommentList
@@ -70,6 +72,7 @@ export function UserProfile({ userId }: Props) {
 ### Server vs Client Components
 
 **Server Components (Default)**
+
 - Fetch data on server
 - No client-side JavaScript
 - Better performance
@@ -84,6 +87,7 @@ export default async function PostsPage() {
 ```
 
 **Client Components**
+
 - Use 'use client' directive
 - Interactive features
 - React hooks
@@ -105,6 +109,7 @@ export function SearchBar() {
 Located in `/src/app/`
 
 #### Route Structure
+
 ```
 app/
 ├── (auth)/          # Route groups (no URL segment)
@@ -126,6 +131,7 @@ app/
 #### Special Files
 
 **layout.tsx** - Shared UI for routes
+
 ```typescript
 export default function DashboardLayout({ children }) {
   return (
@@ -138,6 +144,7 @@ export default function DashboardLayout({ children }) {
 ```
 
 **page.tsx** - Route UI
+
 ```typescript
 export default function DashboardPage() {
   return <div>Dashboard Content</div>;
@@ -145,6 +152,7 @@ export default function DashboardPage() {
 ```
 
 **loading.tsx** - Loading UI
+
 ```typescript
 export default function Loading() {
   return <Spinner />;
@@ -152,6 +160,7 @@ export default function Loading() {
 ```
 
 **error.tsx** - Error handling
+
 ```typescript
 'use client';
 
@@ -189,11 +198,11 @@ export async function POST(request: Request) {
 export async function createPost(formData: FormData) {
   const title = formData.get('title');
   const content = formData.get('content');
-  
+
   // Validation
   // Business logic
   // Data persistence
-  
+
   revalidatePath('/blog');
   redirect('/blog');
 }
@@ -213,18 +222,18 @@ export class UserService {
   async registerUser(data: RegisterData): Promise<User> {
     // Validation
     await this.validateEmail(data.email);
-    
+
     // Business rules
     if (await this.repository.existsByEmail(data.email)) {
       throw new ValidationError('Email already registered');
     }
-    
+
     // Process
     const user = await this.repository.create(data);
-    
+
     // Side effects
     await this.sendWelcomeEmail(user);
-    
+
     return user;
   }
 }
@@ -388,16 +397,19 @@ JSON Response
 ## State Management
 
 ### Server State
+
 - Fetched via Server Components
 - No client-side state needed
 - Automatic caching by Next.js
 
 ### Client State
+
 - React hooks (useState, useReducer)
 - For UI state only
 - Keep minimal
 
 ### Form State
+
 - Server Actions with useFormState
 - Progressive enhancement
 - Server-side validation
@@ -405,6 +417,7 @@ JSON Response
 ## Error Handling
 
 ### Error Boundaries
+
 ```typescript
 // app/error.tsx
 'use client';
@@ -415,42 +428,48 @@ export default function Error({ error, reset }) {
 ```
 
 ### Custom Errors
+
 ```typescript
 export class AppError extends Error {
-  constructor(message: string, public statusCode: number) {
+  constructor(
+    message: string,
+    public statusCode: number
+  ) {
     super(message);
   }
 }
 ```
 
 ### API Error Responses
+
 ```typescript
 if (error instanceof ValidationError) {
-  return NextResponse.json(
-    { error: error.message },
-    { status: 400 }
-  );
+  return NextResponse.json({ error: error.message }, { status: 400 });
 }
 ```
 
 ## Security Architecture
 
 ### Authentication
+
 - Handled at route level
 - Middleware for protection
 - Session/JWT tokens
 
 ### Authorization
+
 - Check permissions in Server Actions
 - Check permissions in API routes
 - Role-based access control
 
 ### Input Validation
+
 - Zod schemas for type safety
 - Validate on server side
 - Sanitize user input
 
 ### Data Protection
+
 - Environment variables for secrets
 - HTTPS in production
 - Security headers configured
@@ -458,30 +477,35 @@ if (error instanceof ValidationError) {
 ## Performance Optimization
 
 ### Server Components
+
 - Default for all components
 - Reduce JavaScript bundle
 - Better initial page load
 
 ### Code Splitting
+
 - Automatic by Next.js
 - Dynamic imports for heavy components
+
 ```typescript
 const HeavyComponent = dynamic(() => import('./HeavyComponent'));
 ```
 
 ### Image Optimization
+
 ```typescript
 import Image from 'next/image';
 
-<Image 
-  src="/image.jpg" 
-  width={800} 
-  height={600} 
+<Image
+  src="/image.jpg"
+  width={800}
+  height={600}
   alt="Description"
 />
 ```
 
 ### Caching Strategy
+
 - Next.js automatic caching
 - Revalidation with `revalidatePath`
 - Custom cache for expensive operations
@@ -489,16 +513,19 @@ import Image from 'next/image';
 ## Testing Strategy
 
 ### Unit Tests
+
 - Test utilities and helpers
 - Test business logic
 - Mock external dependencies
 
 ### Integration Tests
+
 - Test component interactions
 - Test API routes
 - Test Server Actions
 
 ### E2E Tests (Optional)
+
 - Critical user flows
 - Authentication flows
 - Purchase flows
@@ -520,11 +547,13 @@ Database   External APIs
 ### Environment-Specific Configs
 
 **Development**
+
 - Local database
 - Debug logging
 - Hot reload
 
 **Production**
+
 - Production database
 - Error tracking (Sentry)
 - Optimized builds
@@ -533,30 +562,35 @@ Database   External APIs
 ## Key Decisions
 
 ### Why Next.js App Router?
+
 - Server Components for performance
 - Built-in routing and layouts
 - Streaming and Suspense
 - Server Actions for mutations
 
 ### Why TypeScript?
+
 - Type safety at compile time
 - Better IDE support
 - Self-documenting code
 - Catch errors early
 
 ### Why Vitest?
+
 - Fast test execution
 - Native ESM support
 - Better TypeScript support
 - Compatible with Vite ecosystem
 
 ### Why Tailwind CSS?
+
 - Utility-first approach
 - Consistent design system
 - Small bundle size
 - Rapid development
 
 ### Why Zod for Validation?
+
 - TypeScript-first
 - Runtime type checking
 - Composable schemas
@@ -565,6 +599,7 @@ Database   External APIs
 ## Future Considerations
 
 ### Potential Additions
+
 - Database ORM (Prisma)
 - Authentication library (NextAuth.js)
 - State management (if needed)
@@ -574,6 +609,7 @@ Database   External APIs
 - Analytics (Google Analytics, Plausible)
 
 ### Scalability
+
 - Horizontal scaling on Vercel
 - Database connection pooling
 - Caching layer (Redis)

@@ -10,36 +10,36 @@ All placeholders use the format: `__PLACEHOLDER_NAME__`
 
 ### Project Identity
 
-| Placeholder | Description | Example | Used In |
-|------------|-------------|---------|---------|
-| `__PROJECT_NAME__` | Project name (kebab-case recommended) | `my-awesome-app` | package.json, README.md, docs |
-| `__PROJECT_DISPLAY_NAME__` | Human-readable project name | `My Awesome App` | README.md, documentation |
-| `__DESCRIPTION__` | Short project description | `A modern Next.js application` | package.json, README.md |
-| `__AUTHOR__` | Author name or organization | `Jane Doe` or `Acme Corp` | package.json, LICENSE, docs |
-| `__AUTHOR_EMAIL__` | Contact email | `jane@example.com` | package.json, SECURITY.md |
+| Placeholder                | Description                           | Example                        | Used In                       |
+| -------------------------- | ------------------------------------- | ------------------------------ | ----------------------------- |
+| `__PROJECT_NAME__`         | Project name (kebab-case recommended) | `my-awesome-app`               | package.json, README.md, docs |
+| `__PROJECT_DISPLAY_NAME__` | Human-readable project name           | `My Awesome App`               | README.md, documentation      |
+| `__DESCRIPTION__`          | Short project description             | `A modern Next.js application` | package.json, README.md       |
+| `__AUTHOR__`               | Author name or organization           | `Jane Doe` or `Acme Corp`      | package.json, LICENSE, docs   |
+| `__AUTHOR_EMAIL__`         | Contact email                         | `jane@example.com`             | package.json, SECURITY.md     |
 
 ### Repository Information
 
-| Placeholder | Description | Example | Used In |
-|------------|-------------|---------|---------|
-| `__REPO_URL__` | Full GitHub repository URL | `https://github.com/user/repo` | README.md, CONTRIBUTING.md |
-| `__REPO_OWNER__` | GitHub username or org | `username` | README badges, workflows |
-| `__REPO_NAME__` | Repository name | `my-awesome-app` | README badges, workflows |
+| Placeholder      | Description                | Example                        | Used In                    |
+| ---------------- | -------------------------- | ------------------------------ | -------------------------- |
+| `__REPO_URL__`   | Full GitHub repository URL | `https://github.com/user/repo` | README.md, CONTRIBUTING.md |
+| `__REPO_OWNER__` | GitHub username or org     | `username`                     | README badges, workflows   |
+| `__REPO_NAME__`  | Repository name            | `my-awesome-app`               | README badges, workflows   |
 
 ### Domain & Deployment
 
-| Placeholder | Description | Example | Used In |
-|------------|-------------|---------|---------|
-| `__COMPANY_DOMAIN__` | Primary domain name | `example.com` | robots.txt, sitemaps |
-| `__PRODUCTION_URL__` | Production deployment URL | `https://app.example.com` | Environment configs |
+| Placeholder          | Description               | Example                   | Used In              |
+| -------------------- | ------------------------- | ------------------------- | -------------------- |
+| `__COMPANY_DOMAIN__` | Primary domain name       | `example.com`             | robots.txt, sitemaps |
+| `__PRODUCTION_URL__` | Production deployment URL | `https://app.example.com` | Environment configs  |
 
 ### Team & Ownership
 
-| Placeholder | Description | Example | Used In |
-|------------|-------------|---------|---------|
-| `__TEAM_HANDLE__` | GitHub team handle (optional) | `@acme/frontend` | CODEOWNERS |
-| `__SUPPORT_EMAIL__` | Support contact email | `support@example.com` | README.md, docs |
-| `__SECURITY_EMAIL__` | Security vulnerability contact | `security@example.com` | SECURITY.md |
+| Placeholder          | Description                    | Example                | Used In         |
+| -------------------- | ------------------------------ | ---------------------- | --------------- |
+| `__TEAM_HANDLE__`    | GitHub team handle (optional)  | `@acme/frontend`       | CODEOWNERS      |
+| `__SUPPORT_EMAIL__`  | Support contact email          | `support@example.com`  | README.md, docs |
+| `__SECURITY_EMAIL__` | Security vulnerability contact | `security@example.com` | SECURITY.md     |
 
 ## Legacy Placeholders (Non-Standard Format)
 
@@ -55,11 +55,11 @@ These use a simpler format and should also be replaced:
 
 The following are **secrets** that must be configured in GitHub Settings → Secrets and variables → Actions:
 
-| Secret Name | Required? | Description |
-|------------|-----------|-------------|
-| `CODECOV_TOKEN` | Optional | Codecov.io API token for coverage reports |
-| `VERCEL_TOKEN` | Optional | Vercel deployment token |
-| `NPM_TOKEN` | Optional | npm registry token (if publishing packages) |
+| Secret Name     | Required? | Description                                 |
+| --------------- | --------- | ------------------------------------------- |
+| `CODECOV_TOKEN` | Optional  | Codecov.io API token for coverage reports   |
+| `VERCEL_TOKEN`  | Optional  | Vercel deployment token                     |
+| `NPM_TOKEN`     | Optional  | npm registry token (if publishing packages) |
 
 See [docs/secrets.md](../docs/secrets.md) for detailed setup instructions.
 

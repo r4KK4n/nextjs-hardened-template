@@ -9,16 +9,19 @@ This document outlines the security policies and best practices for managing npm
 ## Core Principles
 
 ### 1. **Never Trust Install Scripts by Default**
+
 - npm/pnpm packages can execute arbitrary code during installation via lifecycle scripts
 - Malicious packages can steal secrets, modify source code, or compromise the build
 - Always use `--ignore-scripts` in CI/CD environments
 
 ### 2. **Deterministic Builds**
+
 - Use lockfiles (pnpm-lock.yaml) to ensure reproducible installs
 - Never use `npm install` or `pnpm install` without lockfile in production
 - Always use `npm ci` or `pnpm install --frozen-lockfile` in CI
 
 ### 3. **Defense in Depth**
+
 - Multiple layers of protection: ignore-scripts + lockfile + Dependabot + reviews
 - Minimize attack surface by avoiding unnecessary dependencies
 - Regularly audit dependencies for vulnerabilities
@@ -30,6 +33,7 @@ This document outlines the security policies and best practices for managing npm
 ### ✅ Approved Commands
 
 #### Local Development
+
 ```bash
 # Recommended: Full install with prepare script (for Husky git hooks)
 pnpm install
@@ -40,6 +44,7 @@ pnpm prepare  # Only if you need git hooks
 ```
 
 #### CI/CD Environments (GitHub Actions, etc.)
+
 ```bash
 # MANDATORY: Always use frozen lockfile + ignore scripts
 pnpm install --frozen-lockfile --ignore-scripts
@@ -68,6 +73,7 @@ npm install --ignore-scripts=false  # Explicitly enables scripts
 ### Allowed Scripts
 
 #### `prepare` (Husky only)
+
 ```json
 {
   "scripts": {
@@ -75,6 +81,7 @@ npm install --ignore-scripts=false  # Explicitly enables scripts
   }
 }
 ```
+
 - **Purpose**: Set up git hooks for local development
 - **Execution**: Local dev only (npm/pnpm automatically skips in CI with --ignore-scripts)
 - **Security**: Only runs Husky, which sets up pre-commit hooks from .husky/ directory
@@ -88,10 +95,10 @@ npm install --ignore-scripts=false  # Explicitly enables scripts
   "scripts": {
     // FORBIDDEN - downloads external code
     "postinstall": "node scripts/download-binary.js",
-    
+
     // FORBIDDEN - executes untrusted code
     "install": "curl https://example.com/script.sh | bash",
-    
+
     // FORBIDDEN - arbitrary code execution
     "preinstall": "node scripts/setup.js"
   }
@@ -117,10 +124,11 @@ npm install --ignore-scripts=false  # Explicitly enables scripts
 ### Before Adding a New Dependency
 
 1. **Check Package Reputation**
+
    ```bash
    # Check npm package info
    npm info <package-name>
-   
+
    # Look for:
    # - Weekly downloads (higher is generally safer)
    # - Recent updates (active maintenance)
@@ -129,25 +137,28 @@ npm install --ignore-scripts=false  # Explicitly enables scripts
    ```
 
 2. **Review Install Scripts**
+
    ```bash
    # Check if package has install scripts
    npm show <package-name> scripts
-   
+
    # Clone and inspect if scripts exist
    git clone https://github.com/owner/package.git
    cat package.json | jq '.scripts'
    ```
 
 3. **Check for Security Advisories**
+
    ```bash
    # Run security audit
    pnpm audit
-   
+
    # Check specific package
    npm audit <package-name>
    ```
 
 4. **Review Transitive Dependencies**
+
    ```bash
    # See what dependencies the package brings
    pnpm why <package-name>
@@ -155,10 +166,11 @@ npm install --ignore-scripts=false  # Explicitly enables scripts
    ```
 
 5. **Verify Package Integrity**
+
    ```bash
    # Check package signatures (if available)
    npm verify <package-name>
-   
+
    # Review on npms.io for quality score
    open https://npms.io/search?q=<package-name>
    ```
@@ -185,6 +197,7 @@ npm install --ignore-scripts=false  # Explicitly enables scripts
 ```
 
 **Why this configuration:**
+
 - `--frozen-lockfile`: Fails if lockfile is out of sync (prevents tampering)
 - `--ignore-scripts`: Prevents execution of postinstall/prepare/install scripts
 - Ensures deterministic, secure builds
@@ -200,7 +213,6 @@ If a legitimate dependency requires scripts (e.g., native module compilation):
 
 # Step 2: Review and document why scripts are needed
 # Add to docs/npm-scripts-policy.md explaining the necessity
-
 # Step 3: Run specific scripts explicitly (audited and documented)
 - name: Build native modules (REVIEWED)
   run: |
@@ -211,6 +223,7 @@ If a legitimate dependency requires scripts (e.g., native module compilation):
 ```
 
 **Requirements for enabling scripts:**
+
 1. Document in this file (npm-scripts-policy.md) which package needs it
 2. Explain what the script does and why it's safe
 3. Add code review requirement for any changes to this
@@ -255,11 +268,13 @@ git add pnpm-lock.yaml
 ### Dependabot Configuration
 
 This project uses Dependabot (`.github/dependabot.yml`) to:
+
 - Automatically check for vulnerable dependencies weekly
 - Create PRs for security updates
 - Keep dependencies up-to-date
 
 **Action Required:**
+
 - Review Dependabot PRs promptly (especially security updates)
 - Test changes before merging
 - Never ignore security advisories without investigation
@@ -278,6 +293,7 @@ pnpm audit --json > audit-report.json
 ```
 
 **Schedule:**
+
 - Run `pnpm audit` before every release
 - Review audit results in CI (add to workflow if high-risk project)
 - Address high/critical vulnerabilities immediately
@@ -345,6 +361,7 @@ pnpm prune
 ### When Scripts Are Unavoidable
 
 Some legitimate packages require install scripts:
+
 - Native module compilation (node-gyp, native addons)
 - Binary downloads (platform-specific tools)
 - Code generation (protobuf compilers)
@@ -352,8 +369,10 @@ Some legitimate packages require install scripts:
 **Process for exceptions:**
 
 1. **Document Here**
+
    ```markdown
    ### Approved Script Exception: <package-name>
+
    - **Version**: x.y.z
    - **Script Purpose**: Compiles native C++ addon for <functionality>
    - **Security Review**: [Link to review PR/issue]
@@ -363,10 +382,11 @@ Some legitimate packages require install scripts:
    ```
 
 2. **Implement in CI**
+
    ```yaml
    - name: Install dependencies (secure)
      run: pnpm install --frozen-lockfile --ignore-scripts
-   
+
    - name: Build approved native modules
      run: |
        # Only for documented, reviewed packages
@@ -389,10 +409,11 @@ Some legitimate packages require install scripts:
 ### If Malicious Package is Detected
 
 1. **Immediate Actions**
+
    ```bash
    # Remove the package immediately
    pnpm remove <malicious-package>
-   
+
    # Rotate all secrets that may have been exposed
    # - GitHub tokens
    # - API keys
@@ -446,6 +467,7 @@ npx snyk test
 ## Policy Updates
 
 This policy should be reviewed and updated:
+
 - When new supply-chain attack patterns emerge
 - After security incidents
 - When CI/CD configuration changes

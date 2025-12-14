@@ -5,26 +5,31 @@ This document outlines the coding conventions and standards for this project.
 ## File Naming
 
 ### Components
+
 - **Format**: PascalCase
 - **Examples**: `Button.tsx`, `UserProfile.tsx`, `NavigationMenu.tsx`
 - **Location**: `/src/components/`
 
 ### Utilities and Libraries
+
 - **Format**: kebab-case
 - **Examples**: `format-date.ts`, `api-client.ts`, `user-repository.ts`
 - **Location**: `/src/lib/`
 
 ### Routes and Pages
+
 - **Format**: kebab-case
 - **Examples**: `user-profile/page.tsx`, `about-us/page.tsx`
 - **Location**: `/src/app/`
 
 ### Types
+
 - **Format**: kebab-case with appropriate suffix
 - **Examples**: `user-types.ts`, `api-types.ts`
 - **Location**: `/src/types/`
 
 ### Tests
+
 - **Format**: Match source file with `.test.ts` or `.test.tsx` extension
 - **Examples**: `button.test.tsx`, `format-date.test.ts`
 - **Location**: Next to the file being tested
@@ -32,6 +37,7 @@ This document outlines the coding conventions and standards for this project.
 ## Code Naming
 
 ### Variables and Functions
+
 ```typescript
 // camelCase for variables and functions
 const userName = 'John';
@@ -47,6 +53,7 @@ async function fetchUserData(id: string): Promise<User> {
 ```
 
 ### Constants
+
 ```typescript
 // UPPER_SNAKE_CASE for constants
 const MAX_RETRY_COUNT = 3;
@@ -55,6 +62,7 @@ const DEFAULT_TIMEOUT = 5000;
 ```
 
 ### Types and Interfaces
+
 ```typescript
 // PascalCase for types and interfaces
 interface User {
@@ -71,6 +79,7 @@ interface ButtonProps {
 ```
 
 ### Enums
+
 ```typescript
 // PascalCase for enum name, UPPER_SNAKE_CASE for values
 enum UserRole {
@@ -89,14 +98,16 @@ enum HttpStatus {
 ### React Specific
 
 #### Component Names
+
 ```typescript
 // PascalCase, descriptive names
-function UserProfile() { }
-function NavigationBar() { }
-function SearchResults() { }
+function UserProfile() {}
+function NavigationBar() {}
+function SearchResults() {}
 ```
 
 #### Props Interfaces
+
 ```typescript
 // Component name + Props suffix
 interface ButtonProps {
@@ -111,22 +122,25 @@ interface UserCardProps {
 ```
 
 #### Hooks
+
 ```typescript
 // Prefix with 'use'
-function useAuth() { }
-function useLocalStorage<T>(key: string) { }
-function useFetch<T>(url: string) { }
+function useAuth() {}
+function useLocalStorage<T>(key: string) {}
+function useFetch<T>(url: string) {}
 ```
 
 #### Event Handlers
+
 ```typescript
 // Prefix with 'handle'
-function handleClick() { }
-function handleSubmit(e: FormEvent) { }
-function handleInputChange(value: string) { }
+function handleClick() {}
+function handleSubmit(e: FormEvent) {}
+function handleInputChange(value: string) {}
 ```
 
 #### Boolean Props/Variables
+
 ```typescript
 // Prefix with is/has/should/can
 const isLoading = false;
@@ -205,6 +219,7 @@ import type { Props } from './types';
 ## TypeScript Guidelines
 
 ### Prefer Explicit Types
+
 ```typescript
 // ❌ Avoid
 const data = getData();
@@ -214,6 +229,7 @@ const data: User[] = getData();
 ```
 
 ### Use Interface for Objects, Type for Unions
+
 ```typescript
 // ✅ Interface for object shapes
 interface User {
@@ -227,9 +243,10 @@ type ID = string | number;
 ```
 
 ### Avoid Any
+
 ```typescript
 // ❌ Avoid
-function process(data: any) { }
+function process(data: any) {}
 
 // ✅ Use unknown or specific types
 function process(data: unknown) {
@@ -244,18 +261,14 @@ interface ProcessData {
   value: number;
 }
 
-function process(data: ProcessData) { }
+function process(data: ProcessData) {}
 ```
 
 ### Use Type Guards
+
 ```typescript
 function isUser(data: unknown): data is User {
-  return (
-    typeof data === 'object' &&
-    data !== null &&
-    'id' in data &&
-    'name' in data
-  );
+  return typeof data === 'object' && data !== null && 'id' in data && 'name' in data;
 }
 
 if (isUser(data)) {
@@ -267,6 +280,7 @@ if (isUser(data)) {
 ## Component Patterns
 
 ### Server Component (Default)
+
 ```typescript
 // No 'use client' directive
 export default async function UserPage({ params }: Props) {
@@ -276,6 +290,7 @@ export default async function UserPage({ params }: Props) {
 ```
 
 ### Client Component
+
 ```typescript
 'use client';
 
@@ -288,6 +303,7 @@ export function Counter() {
 ```
 
 ### Component with Props
+
 ```typescript
 interface CardProps {
   title: string;
@@ -310,18 +326,12 @@ export function Card({ title, children, className = '' }: CardProps) {
 ```typescript
 import { NextResponse } from 'next/server';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
     const data = await fetchData(params.id);
     return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 ```
@@ -329,6 +339,7 @@ export async function GET(
 ## Error Handling
 
 ### Try-Catch for Async Operations
+
 ```typescript
 async function fetchData() {
   try {
@@ -342,6 +353,7 @@ async function fetchData() {
 ```
 
 ### Custom Error Classes
+
 ```typescript
 export class AppError extends Error {
   constructor(
@@ -363,7 +375,9 @@ export class ValidationError extends AppError {
 ## Testing Conventions
 
 ### Test File Location
+
 Place test files next to the code they test:
+
 ```
 src/
 ├── components/
@@ -375,16 +389,17 @@ src/
 ```
 
 ### Test Structure
+
 ```typescript
 describe('ComponentName or FunctionName', () => {
   describe('specific behavior', () => {
     it('should do something specific', () => {
       // Arrange
       const input = 'test';
-      
+
       // Act
       const result = functionToTest(input);
-      
+
       // Assert
       expect(result).toBe('expected');
     });
@@ -393,6 +408,7 @@ describe('ComponentName or FunctionName', () => {
 ```
 
 ### Test Naming
+
 ```typescript
 // ✅ Descriptive test names
 it('should return formatted date when given valid date string', () => {});
@@ -407,6 +423,7 @@ it('test 1', () => {});
 ## Comments
 
 ### When to Comment
+
 ```typescript
 // ✅ Complex business logic
 // Calculate discount based on customer tier and purchase history
@@ -425,6 +442,7 @@ const validated = validateSync(data);
 ```
 
 ### When NOT to Comment
+
 ```typescript
 // ❌ Obvious code
 // Set name to user name
@@ -438,6 +456,7 @@ counter += 1;
 ## Git Commit Messages
 
 ### Format
+
 ```
 type(scope): subject
 
@@ -447,6 +466,7 @@ footer (optional)
 ```
 
 ### Types
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation
@@ -456,6 +476,7 @@ footer (optional)
 - `chore`: Maintenance tasks
 
 ### Examples
+
 ```
 feat(auth): add password reset functionality
 
@@ -477,6 +498,7 @@ Fixes #456
 ## Environment Variables
 
 ### Naming
+
 ```bash
 # Client-side (public)
 NEXT_PUBLIC_APP_URL=https://example.com
@@ -489,6 +511,7 @@ NEXTAUTH_SECRET=secret123
 ```
 
 ### Usage
+
 ```typescript
 // ✅ Type-safe environment variables
 declare global {
@@ -518,6 +541,7 @@ const appUrl = process.env.NEXT_PUBLIC_APP_URL;
 ## ESLint Rules
 
 Key rules enforced:
+
 - No unused variables (except prefixed with `_`)
 - No console.log in production (use logger)
 - Prefer const over let
@@ -527,13 +551,14 @@ Key rules enforced:
 ## Documentation
 
 ### JSDoc for Public APIs
-```typescript
+
+````typescript
 /**
  * Formats a date to a human-readable string
- * 
+ *
  * @param date - Date to format (Date object or ISO string)
  * @returns Formatted date string
- * 
+ *
  * @example
  * ```typescript
  * formatDate(new Date()); // "January 15, 2024"
@@ -543,7 +568,7 @@ Key rules enforced:
 export function formatDate(date: Date | string): string {
   // Implementation
 }
-```
+````
 
 ## Additional Resources
 

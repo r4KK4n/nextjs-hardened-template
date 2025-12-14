@@ -1,6 +1,7 @@
 # GitHub Copilot System Instructions
 
 ## Overview
+
 This document defines the global rules and standards for GitHub Copilot when assisting with this Next.js + TypeScript project. All code generation should follow these guidelines.
 
 ---
@@ -8,6 +9,7 @@ This document defines the global rules and standards for GitHub Copilot when ass
 ## Core Principles
 
 ### 1. Code Quality Standards
+
 - Write clean, maintainable, and self-documenting code
 - Follow SOLID principles and DRY (Don't Repeat Yourself)
 - Prefer composition over inheritance
@@ -15,6 +17,7 @@ This document defines the global rules and standards for GitHub Copilot when ass
 - Use meaningful variable and function names
 
 ### 2. TypeScript Standards
+
 - Always use strict TypeScript typing
 - Avoid `any` type; use `unknown` if type is truly unknown
 - Define proper interfaces and types for all data structures
@@ -22,6 +25,7 @@ This document defines the global rules and standards for GitHub Copilot when ass
 - Leverage discriminated unions for complex state management
 
 ### 3. React Best Practices
+
 - Prefer functional components over class components
 - Use hooks appropriately (useState, useEffect, useCallback, useMemo)
 - Implement proper error boundaries
@@ -29,6 +33,7 @@ This document defines the global rules and standards for GitHub Copilot when ass
 - Separate business logic from presentation components
 
 ### 4. Next.js Conventions
+
 - Use App Router structure (`/app` directory)
 - Implement proper loading and error states
 - Use Server Components by default, Client Components when needed
@@ -40,12 +45,14 @@ This document defines the global rules and standards for GitHub Copilot when ass
 ## Naming Conventions
 
 ### Files and Directories
+
 - **Components**: PascalCase (e.g., `Button.tsx`, `UserProfile.tsx`)
 - **Utilities/Libs**: kebab-case (e.g., `format-date.ts`, `api-client.ts`)
 - **Routes**: kebab-case (e.g., `user-profile/page.tsx`)
 - **Types**: kebab-case (e.g., `user-types.ts`, `api-types.ts`)
 
 ### Code Elements
+
 - **Variables/Functions**: camelCase (e.g., `userName`, `fetchUserData`)
 - **Constants**: UPPER_SNAKE_CASE (e.g., `API_URL`, `MAX_RETRY_COUNT`)
 - **Types/Interfaces**: PascalCase (e.g., `UserProfile`, `ApiResponse`)
@@ -53,6 +60,7 @@ This document defines the global rules and standards for GitHub Copilot when ass
 - **Private members**: prefix with underscore (e.g., `_handleError`)
 
 ### React Specific
+
 - **Component Props**: PascalCase + `Props` suffix (e.g., `ButtonProps`)
 - **Hook functions**: prefix with `use` (e.g., `useAuth`, `useFetch`)
 - **Event handlers**: prefix with `handle` (e.g., `handleClick`, `handleSubmit`)
@@ -90,12 +98,14 @@ src/
 Before considering any code complete, ensure:
 
 ### Functionality
+
 - [ ] Code works as expected with no known bugs
 - [ ] All edge cases are handled
 - [ ] Error states are properly managed
 - [ ] Loading states are implemented where applicable
 
 ### Code Quality
+
 - [ ] TypeScript types are properly defined
 - [ ] No `any` types without justification
 - [ ] ESLint passes with no warnings
@@ -103,30 +113,35 @@ Before considering any code complete, ensure:
 - [ ] Code is self-documenting with clear naming
 
 ### Testing
+
 - [ ] Unit tests are written for business logic
 - [ ] Tests pass locally
 - [ ] Edge cases are covered in tests
 - [ ] Test coverage meets project standards (>80%)
 
 ### Documentation
+
 - [ ] Complex logic has explanatory comments
 - [ ] Public APIs are documented
 - [ ] README is updated if needed
 - [ ] Type definitions serve as documentation
 
 ### Performance
+
 - [ ] No unnecessary re-renders
 - [ ] Proper use of memoization (useMemo, useCallback)
 - [ ] Images are optimized
 - [ ] Bundle size impact is considered
 
 ### Accessibility
+
 - [ ] Semantic HTML is used
 - [ ] ARIA labels where needed
 - [ ] Keyboard navigation works
 - [ ] Color contrast meets WCAG standards
 
 ### Security
+
 - [ ] No sensitive data in client code
 - [ ] Input is properly validated
 - [ ] XSS vulnerabilities are prevented
@@ -139,6 +154,7 @@ Before considering any code complete, ensure:
 ## Supply-Chain Security
 
 ### Package Management Rules
+
 - **NEVER use `npm install` in CI** - always use `npm ci --ignore-scripts`
 - **NEVER use `pnpm install` in CI** - always use `pnpm install --frozen-lockfile --ignore-scripts`
 - **DO NOT add postinstall/install/prepare scripts** that download or execute external code
@@ -146,6 +162,7 @@ Before considering any code complete, ensure:
 - **ALWAYS pin exact versions** of critical dependencies in package.json
 
 ### Lifecycle Scripts Policy
+
 - postinstall/install/preinstall scripts are **disabled by default in CI**
 - Scripts that run on install must be:
   - Explicitly documented in docs/npm-scripts-policy.md
@@ -154,6 +171,7 @@ Before considering any code complete, ensure:
 - The only exception: `prepare` script for Husky (runs locally, not in CI)
 
 ### When Adding Dependencies
+
 1. Check package reputation (downloads, maintainers, recent updates)
 2. Review package source code if adding privileged operations
 3. Verify package doesn't have install scripts that download external resources
@@ -165,6 +183,7 @@ Before considering any code complete, ensure:
 ## Do's and Don'ts
 
 ### ✅ DO
+
 - Use Server Components by default
 - Implement proper error boundaries
 - Use environment variables for configuration
@@ -180,6 +199,7 @@ Before considering any code complete, ensure:
 - Keep lockfiles (pnpm-lock.yaml) committed and up-to-date
 
 ### ❌ DON'T
+
 - Use `any` type without good reason
 - Ignore TypeScript errors
 - Commit console.log statements
@@ -217,21 +237,20 @@ When reviewing code (or generating code), verify:
 ## Common Patterns
 
 ### API Route Pattern
+
 ```typescript
 export async function GET(request: Request) {
   try {
     // Logic here
     return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Error message' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error message' }, { status: 500 });
   }
 }
 ```
 
 ### Server Component Pattern
+
 ```typescript
 export default async function Page() {
   const data = await fetchData();
@@ -240,6 +259,7 @@ export default async function Page() {
 ```
 
 ### Client Component Pattern
+
 ```typescript
 'use client';
 
@@ -297,6 +317,7 @@ export function Component({ data }: ComponentProps) {
 ## Comments and Documentation
 
 ### When to Comment
+
 - Complex algorithms or business logic
 - Non-obvious decisions or workarounds
 - Public API functions
@@ -304,15 +325,17 @@ export function Component({ data }: ComponentProps) {
 - Performance optimizations
 
 ### When NOT to Comment
+
 - Obvious code (let the code speak)
 - Redundant information
 - Outdated information (remove old comments)
 
 ### Comment Style
+
 ```typescript
 /**
  * Brief description of function
- * 
+ *
  * @param param1 - Description of parameter
  * @returns Description of return value
  */
@@ -326,17 +349,20 @@ function example(param1: string): number {
 ## Testing Strategy
 
 ### Unit Tests
+
 - Test business logic in isolation
 - Test utility functions
 - Test custom hooks
 - Mock external dependencies
 
 ### Integration Tests
+
 - Test component interactions
 - Test API route handlers
 - Test data flow
 
 ### Test Naming
+
 ```typescript
 describe('ComponentName', () => {
   it('should do something specific', () => {
@@ -350,6 +376,7 @@ describe('ComponentName', () => {
 ## Version Control
 
 ### Commit Message Format
+
 ```
 type(scope): subject
 
@@ -359,6 +386,7 @@ footer (optional)
 ```
 
 ### Types
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation

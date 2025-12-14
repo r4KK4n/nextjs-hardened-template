@@ -11,6 +11,7 @@ The `.github/copilot/` directory contains a comprehensive prompt system designed
 ### `.github/copilot/system.md`
 
 This is the global instruction file that Copilot reads automatically. It contains:
+
 - Project conventions and standards
 - Naming conventions
 - Code quality guidelines
@@ -81,6 +82,7 @@ Created following nextjs-component.md guidelines:
 ### Creating a New Component
 
 1. Reference the component prompt in a comment:
+
 ```typescript
 // @copilot: Create a Modal component using nextjs-component.md
 // Requirements:
@@ -97,6 +99,7 @@ Created following nextjs-component.md guidelines:
 
 1. Create the file `src/app/api/your-endpoint/route.ts`
 2. Add a comment:
+
 ```typescript
 // @copilot: Using api-route.md, create a POST endpoint for creating blog posts
 // - Validate title (1-100 chars)
@@ -112,6 +115,7 @@ Created following nextjs-component.md guidelines:
 
 1. Create test file alongside your code
 2. Reference the test prompt:
+
 ```typescript
 // @copilot: Following unit-tests.md, create tests for the Button component
 // Test cases:
@@ -128,6 +132,7 @@ Created following nextjs-component.md guidelines:
 1. Select the code to refactor
 2. Open Copilot Chat
 3. Use the refactor prompt:
+
 ```
 @workspace Using refactor.md patterns, improve this code by:
 - Extracting reusable functions
@@ -141,6 +146,7 @@ Created following nextjs-component.md guidelines:
 
 1. Open Copilot Chat
 2. Reference the security prompt:
+
 ```
 @workspace Using security-review.md, review this API endpoint for
 security issues:
@@ -158,11 +164,13 @@ security issues:
 ### Be Specific
 
 ❌ Bad:
+
 ```typescript
 // @copilot: Create a form
 ```
 
 ✅ Good:
+
 ```typescript
 // @copilot: Using nextjs-component.md, create a contact form with:
 // - Name field (required, 1-100 chars)
@@ -176,11 +184,13 @@ security issues:
 ### Provide Context
 
 ❌ Bad:
+
 ```typescript
 // @copilot: Make this faster
 ```
 
 ✅ Good:
+
 ```typescript
 // @copilot: Using performance.md, optimize this component:
 // Current issue: Re-renders on every parent update
@@ -199,25 +209,33 @@ security issues:
 ## Prompt Categories
 
 ### Creation Prompts
+
 Use when building new features:
+
 - `nextjs-component.md`
 - `api-route.md`
 - `server-action.md`
 - `data-access.md`
 
 ### Quality Prompts
+
 Use when improving existing code:
+
 - `refactor.md`
 - `performance.md`
 - `security-review.md`
 - `code-review.md`
 
 ### Testing Prompts
+
 Use when writing tests:
+
 - `unit-tests.md`
 
 ### Maintenance Prompts
+
 Use for ongoing work:
+
 - `bugfix.md`
 - `docs.md`
 
@@ -226,6 +244,7 @@ Use for ongoing work:
 ### Building a Blog Feature
 
 1. **Data Layer**
+
 ```typescript
 // @copilot: Using data-access.md, create a PostRepository with:
 // - findById(id)
@@ -236,6 +255,7 @@ Use for ongoing work:
 ```
 
 2. **API Routes**
+
 ```typescript
 // @copilot: Following api-route.md, create CRUD endpoints for blog posts
 // GET /api/posts - List posts with pagination
@@ -246,6 +266,7 @@ Use for ongoing work:
 ```
 
 3. **Components**
+
 ```typescript
 // @copilot: Using nextjs-component.md, create:
 // - PostList component (displays array of posts)
@@ -254,6 +275,7 @@ Use for ongoing work:
 ```
 
 4. **Tests**
+
 ```typescript
 // @copilot: Following unit-tests.md, test PostRepository:
 // - CRUD operations
@@ -292,6 +314,7 @@ Use for ongoing work:
 ### Copilot Not Following Conventions
 
 Try being more explicit:
+
 ```typescript
 // @copilot: IMPORTANT - Follow ALL conventions from system.md
 // Specifically:
@@ -304,6 +327,7 @@ Try being more explicit:
 ### Generated Code Missing Tests
 
 Explicitly request tests:
+
 ```typescript
 // @copilot: Create MyComponent following nextjs-component.md
 // MUST INCLUDE: Unit tests as shown in unit-tests.md
@@ -312,6 +336,7 @@ Explicitly request tests:
 ### Security Concerns
 
 Always run security review:
+
 ```
 @workspace Use security-review.md to audit this code
 for common vulnerabilities before I commit it.
@@ -320,22 +345,26 @@ for common vulnerabilities before I commit it.
 ## Integration with Workflow
 
 ### Before Coding
+
 1. Review relevant prompt files
 2. Understand patterns and conventions
 3. Plan your approach
 
 ### During Coding
+
 1. Reference prompts in comments
 2. Let Copilot suggest implementations
 3. Review and refine suggestions
 
 ### After Coding
+
 1. Use code-review.md for self-review
 2. Run security-review.md checks
 3. Ensure tests are included
 4. Update documentation
 
 ### During Review
+
 1. Share prompt files with reviewers
 2. Reference conventions in PR descriptions
 3. Use code-review.md guidelines
@@ -348,15 +377,19 @@ Create project-specific prompts in the same directory:
 
 ```markdown
 <!-- .github/copilot/prompts/feature-x.md -->
+
 # Copilot Prompt: Feature X Implementation
 
 ## Context
+
 [Your specific feature context]
 
 ## Pattern
+
 [Your established pattern]
 
 ## Example
+
 [Your example code]
 ```
 
@@ -381,6 +414,7 @@ Create project-specific prompts in the same directory:
 ## Feedback
 
 If you find prompts that need improvement:
+
 1. Open an issue describing the problem
 2. Suggest improvements
 3. Update prompt files in your PR

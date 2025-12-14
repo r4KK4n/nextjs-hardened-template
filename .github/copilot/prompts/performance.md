@@ -1,9 +1,11 @@
 # Copilot Prompt: Performance Optimization
 
 ## Context
+
 Identify and fix performance bottlenecks in React components, API routes, and application code.
 
 ## When to Use
+
 - Application feels slow
 - Long load times
 - Unresponsive UI
@@ -75,8 +77,8 @@ function ExpensiveComponent({ data }) {
 }
 
 // After: Only re-renders when data changes
-export const ExpensiveComponent = React.memo(function ExpensiveComponent({ 
-  data 
+export const ExpensiveComponent = React.memo(function ExpensiveComponent({
+  data
 }: { data: Data }) {
   return <div>{/* Complex rendering */}</div>;
 });
@@ -89,7 +91,7 @@ export const ExpensiveComponent = React.memo(function ExpensiveComponent({
 function DataDisplay({ items }) {
   const sortedItems = sortComplexData(items);
   const filteredItems = filterData(sortedItems);
-  
+
   return <List items={filteredItems} />;
 }
 
@@ -99,7 +101,7 @@ function DataDisplay({ items }: { items: Item[] }) {
     const sorted = sortComplexData(items);
     return filterData(sorted);
   }, [items]);
-  
+
   return <List items={processedItems} />;
 }
 ```
@@ -110,10 +112,10 @@ function DataDisplay({ items }: { items: Item[] }) {
 // Before: Creates new function on every render
 function Parent() {
   const [count, setCount] = useState(0);
-  
+
   return (
-    <Child 
-      onClick={() => setCount(c => c + 1)} 
+    <Child
+      onClick={() => setCount(c => c + 1)}
     />
   );
 }
@@ -121,11 +123,11 @@ function Parent() {
 // After: Stable function reference
 function Parent() {
   const [count, setCount] = useState(0);
-  
+
   const handleClick = useCallback(() => {
     setCount(c => c + 1);
   }, []);
-  
+
   return <Child onClick={handleClick} />;
 }
 ```
@@ -179,13 +181,13 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 
 function VirtualizedList({ items }: { items: Item[] }) {
   const parentRef = useRef<HTMLDivElement>(null);
-  
+
   const virtualizer = useVirtualizer({
     count: items.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 50,
   });
-  
+
   return (
     <div ref={parentRef} style={{ height: '400px', overflow: 'auto' }}>
       <div style={{ height: `${virtualizer.getTotalSize()}px` }}>
@@ -238,7 +240,7 @@ import Image from 'next/image';
 // After: Next.js font optimization
 import { Inter } from 'next/font/google';
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
 });
@@ -281,9 +283,9 @@ async function Posts() {
 // Server-side caching
 export async function GET() {
   const data = await fetch('https://api.example.com/data', {
-    next: { revalidate: 3600 } // Cache for 1 hour
+    next: { revalidate: 3600 }, // Cache for 1 hour
   });
-  
+
   return NextResponse.json(data);
 }
 
@@ -291,16 +293,12 @@ export async function GET() {
 import useSWR from 'swr';
 
 function useUserData(userId: string) {
-  const { data, error } = useSWR(
-    `/api/users/${userId}`,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      dedupingInterval: 5000,
-    }
-  );
-  
+  const { data, error } = useSWR(`/api/users/${userId}`, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    dedupingInterval: 5000,
+  });
+
   return { data, error, isLoading: !error && !data };
 }
 ```
@@ -311,13 +309,13 @@ function useUserData(userId: string) {
 // Before: N+1 query problem
 async function getPostsWithAuthors() {
   const posts = await db.post.findMany();
-  
+
   for (const post of posts) {
     post.author = await db.user.findUnique({
-      where: { id: post.authorId }
+      where: { id: post.authorId },
     });
   }
-  
+
   return posts;
 }
 
@@ -325,8 +323,8 @@ async function getPostsWithAuthors() {
 async function getPostsWithAuthors() {
   return db.post.findMany({
     include: {
-      author: true
-    }
+      author: true,
+    },
   });
 }
 
@@ -335,7 +333,7 @@ async function getPosts(page: number, limit: number) {
   return db.post.findMany({
     skip: (page - 1) * limit,
     take: limit,
-    orderBy: { createdAt: 'desc' }
+    orderBy: { createdAt: 'desc' },
   });
 }
 ```
@@ -349,7 +347,7 @@ import { debounce } from '@/lib/utils';
 
 function SearchInput() {
   const [query, setQuery] = useState('');
-  
+
   // Debounce search to reduce API calls
   const debouncedSearch = useMemo(
     () => debounce((value: string) => {
@@ -357,13 +355,13 @@ function SearchInput() {
     }, 300),
     []
   );
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
     debouncedSearch(value);
   };
-  
+
   return (
     <input
       type="text"
@@ -385,14 +383,14 @@ function ScrollHandler() {
     const handleScroll = throttle(() => {
       // Handle scroll event
     }, 100);
-    
+
     window.addEventListener('scroll', handleScroll);
-    
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  
+
   return <div>{/* Content */}</div>;
 }
 ```
@@ -438,7 +436,7 @@ import { onCLS, onFID, onLCP } from 'web-vitals';
 function sendToAnalytics(metric: Metric) {
   const body = JSON.stringify(metric);
   const url = 'https://analytics.example.com/vitals';
-  
+
   if (navigator.sendBeacon) {
     navigator.sendBeacon(url, body);
   } else {
@@ -473,6 +471,7 @@ onLCP(sendToAnalytics);
 - **Bundle Size**: < 200KB (gzipped)
 
 ## Related Prompts
+
 - `refactor.md` - For refactoring during optimization
 - `code-review.md` - For reviewing performance changes
 - `unit-tests.md` - For testing optimized code

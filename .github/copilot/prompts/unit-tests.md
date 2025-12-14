@@ -1,9 +1,11 @@
 # Copilot Prompt: Unit Tests
 
 ## Context
+
 Write comprehensive unit tests for functions, utilities, and components using Vitest and React Testing Library.
 
 ## When to Use
+
 - Testing utility functions
 - Testing React components
 - Testing custom hooks
@@ -48,10 +50,10 @@ describe('ComponentName or FunctionName', () => {
   it('should do something specific', () => {
     // Arrange
     const input = 'test';
-    
+
     // Act
     const result = functionToTest(input);
-    
+
     // Assert
     expect(result).toBe('expected');
   });
@@ -190,9 +192,9 @@ describe('Button', () => {
   it('should call onClick when clicked', () => {
     const handleClick = vi.fn();
     render(<Button onClick={handleClick}>Click me</Button>);
-    
+
     fireEvent.click(screen.getByText('Click me'));
-    
+
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
@@ -203,9 +205,9 @@ describe('Button', () => {
         Click me
       </Button>
     );
-    
+
     fireEvent.click(screen.getByText('Click me'));
-    
+
     expect(handleClick).not.toHaveBeenCalled();
   });
 
@@ -257,7 +259,7 @@ describe('fetchUserData', () => {
 
   it('should fetch user data successfully', async () => {
     const mockUser = { id: '1', name: 'John Doe' };
-    
+
     (fetch as any).mockResolvedValueOnce({
       ok: true,
       json: async () => mockUser,
@@ -306,33 +308,33 @@ describe('useCounter', () => {
 
   it('should increment count', () => {
     const { result } = renderHook(() => useCounter());
-    
+
     act(() => {
       result.current.increment();
     });
-    
+
     expect(result.current.count).toBe(1);
   });
 
   it('should decrement count', () => {
     const { result } = renderHook(() => useCounter(5));
-    
+
     act(() => {
       result.current.decrement();
     });
-    
+
     expect(result.current.count).toBe(4);
   });
 
   it('should reset count', () => {
     const { result } = renderHook(() => useCounter(5));
-    
+
     act(() => {
       result.current.increment();
       result.current.increment();
       result.current.reset();
     });
-    
+
     expect(result.current.count).toBe(5);
   });
 });
@@ -405,6 +407,7 @@ expect(element).toHaveTextContent('text');
 - [ ] Coverage is adequate
 
 ## Related Prompts
+
 - `nextjs-component.md` - For creating components
 - `api-route.md` - For API testing
 - `refactor.md` - When refactoring with tests

@@ -1,9 +1,11 @@
 # Copilot Prompt: Security Review
 
 ## Context
+
 Review code for security vulnerabilities and implement security best practices.
 
 ## When to Use
+
 - Before deploying to production
 - After implementing authentication
 - When handling sensitive data
@@ -13,6 +15,7 @@ Review code for security vulnerabilities and implement security best practices.
 ## Security Checklist
 
 ### Authentication & Authorization
+
 - [ ] Authentication is required for protected routes
 - [ ] Authorization checks are in place
 - [ ] Session tokens are secure
@@ -22,6 +25,7 @@ Review code for security vulnerabilities and implement security best practices.
 - [ ] Account lockout after failed attempts
 
 ### Input Validation
+
 - [ ] All user inputs are validated
 - [ ] Type checking is enforced
 - [ ] Input length is restricted
@@ -31,6 +35,7 @@ Review code for security vulnerabilities and implement security best practices.
 - [ ] NoSQL injection is prevented
 
 ### XSS Prevention
+
 - [ ] User content is sanitized
 - [ ] Output is properly escaped
 - [ ] innerHTML is avoided
@@ -38,12 +43,14 @@ Review code for security vulnerabilities and implement security best practices.
 - [ ] Dangerous HTML is stripped
 
 ### CSRF Protection
+
 - [ ] CSRF tokens are implemented
 - [ ] SameSite cookie attribute is set
 - [ ] Origin headers are checked
 - [ ] State-changing operations require POST
 
 ### API Security
+
 - [ ] Rate limiting is implemented
 - [ ] API keys are secured
 - [ ] CORS is properly configured
@@ -52,6 +59,7 @@ Review code for security vulnerabilities and implement security best practices.
 - [ ] Input is validated
 
 ### Data Protection
+
 - [ ] Sensitive data is encrypted
 - [ ] HTTPS is enforced
 - [ ] Secrets are not in code
@@ -60,6 +68,7 @@ Review code for security vulnerabilities and implement security best practices.
 - [ ] Personal data is protected (GDPR)
 
 ### Error Handling
+
 - [ ] Errors don't expose sensitive info
 - [ ] Stack traces are hidden in production
 - [ ] Generic error messages for users
@@ -79,7 +88,7 @@ async function getUser(email: string) {
 // ✅ Secure
 async function getUser(email: string) {
   return db.user.findUnique({
-    where: { email }
+    where: { email },
   });
 }
 ```
@@ -120,14 +129,11 @@ export async function POST(request: Request) {
 export async function POST(request: Request) {
   const origin = request.headers.get('origin');
   const host = request.headers.get('host');
-  
+
   if (origin !== `https://${host}`) {
-    return NextResponse.json(
-      { error: 'Invalid origin' },
-      { status: 403 }
-    );
+    return NextResponse.json({ error: 'Invalid origin' }, { status: 403 });
   }
-  
+
   const data = await request.json();
   await performAction(data);
   return NextResponse.json({ success: true });
@@ -138,42 +144,30 @@ export async function POST(request: Request) {
 
 ```typescript
 // ❌ Vulnerable: No authorization check
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   const document = await db.document.findUnique({
-    where: { id: params.id }
+    where: { id: params.id },
   });
-  
+
   return NextResponse.json(document);
 }
 
 // ✅ Secure: Check ownership
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   const session = await getServerSession();
-  
+
   if (!session) {
-    return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  
+
   const document = await db.document.findUnique({
-    where: { id: params.id }
+    where: { id: params.id },
   });
-  
+
   if (!document || document.ownerId !== session.user.id) {
-    return NextResponse.json(
-      { error: 'Not found' },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
-  
+
   return NextResponse.json(document);
 }
 ```
@@ -195,9 +189,9 @@ export async function GET() {
       name: true,
       email: true,
       // password and other sensitive fields excluded
-    }
+    },
   });
-  
+
   return NextResponse.json(users);
 }
 ```
@@ -208,7 +202,7 @@ export async function GET() {
 // ❌ Vulnerable: Plain text passwords
 async function createUser(email: string, password: string) {
   await db.user.create({
-    data: { email, password }
+    data: { email, password },
   });
 }
 
@@ -217,12 +211,12 @@ import bcrypt from 'bcrypt';
 
 async function createUser(email: string, password: string) {
   const hashedPassword = await bcrypt.hash(password, 10);
-  
+
   await db.user.create({
     data: {
       email,
-      password: hashedPassword
-    }
+      password: hashedPassword,
+    },
   });
 }
 
@@ -275,7 +269,9 @@ const nextConfig: NextConfig = {
               font-src 'self' data:;
               connect-src 'self';
               frame-ancestors 'none';
-            `.replace(/\s{2,}/g, ' ').trim()
+            `
+              .replace(/\s{2,}/g, ' ')
+              .trim(),
           },
         ],
       },
@@ -297,9 +293,9 @@ const ratelimit = new Ratelimit({
 
 export async function POST(request: Request) {
   const ip = request.headers.get('x-forwarded-for') ?? 'unknown';
-  
+
   const { success, limit, reset, remaining } = await ratelimit.limit(ip);
-  
+
   if (!success) {
     return NextResponse.json(
       { error: 'Rate limit exceeded' },
@@ -313,7 +309,7 @@ export async function POST(request: Request) {
       }
     );
   }
-  
+
   // Process request
 }
 ```
@@ -325,7 +321,8 @@ import { z } from 'zod';
 
 const userSchema = z.object({
   email: z.string().email(),
-  password: z.string()
+  password: z
+    .string()
     .min(8, 'Password must be at least 8 characters')
     .regex(/[A-Z]/, 'Password must contain uppercase letter')
     .regex(/[a-z]/, 'Password must contain lowercase letter')
@@ -338,7 +335,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const validated = userSchema.parse(body);
-    
+
     // Use validated data
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -360,56 +357,44 @@ const maxSize = 5 * 1024 * 1024; // 5MB
 export async function POST(request: Request) {
   const formData = await request.formData();
   const file = formData.get('file') as File;
-  
+
   if (!file) {
-    return NextResponse.json(
-      { error: 'No file provided' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'No file provided' }, { status: 400 });
   }
-  
+
   // Check file type
   if (!allowedTypes.includes(file.type)) {
-    return NextResponse.json(
-      { error: 'Invalid file type' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Invalid file type' }, { status: 400 });
   }
-  
+
   // Check file size
   if (file.size > maxSize) {
-    return NextResponse.json(
-      { error: 'File too large' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'File too large' }, { status: 400 });
   }
-  
+
   // Check file content (magic bytes)
   const buffer = await file.arrayBuffer();
   const bytes = new Uint8Array(buffer);
-  
+
   // Verify it's actually an image
   if (!isValidImageFile(bytes)) {
-    return NextResponse.json(
-      { error: 'Invalid file content' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Invalid file content' }, { status: 400 });
   }
-  
+
   // Process file
 }
 
 function isValidImageFile(bytes: Uint8Array): boolean {
   // Check magic bytes for JPEG
-  if (bytes[0] === 0xFF && bytes[1] === 0xD8 && bytes[2] === 0xFF) {
+  if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
     return true;
   }
-  
+
   // Check magic bytes for PNG
-  if (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E) {
+  if (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e) {
     return true;
   }
-  
+
   return false;
 }
 ```
@@ -446,6 +431,7 @@ export async function login(sessionId: string) {
 ## Security Tools
 
 ### Dependency Scanning
+
 ```bash
 # Check for vulnerabilities
 pnpm audit
@@ -455,6 +441,7 @@ pnpm audit fix
 ```
 
 ### Static Analysis
+
 ```bash
 # ESLint security plugin
 pnpm add -D eslint-plugin-security
@@ -490,6 +477,7 @@ pnpm eslint --plugin security
 ❌ Forget error handling
 
 ## Related Prompts
+
 - `api-route.md` - For secure API implementation
 - `code-review.md` - For security code reviews
 - `bugfix.md` - For security-related bugs

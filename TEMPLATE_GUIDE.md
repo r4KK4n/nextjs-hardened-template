@@ -1,6 +1,7 @@
 # 📦 Complete Next.js + TypeScript Template Repository
 
 ## Table of Contents
+
 1. [Complete File Tree](#complete-file-tree)
 2. [Rationale for Major Groups](#rationale-for-major-groups)
 3. [How to Use This Template](#how-to-use-this-template)
@@ -98,129 +99,160 @@ nextjs-ts-template/
 ├── tsconfig.json                       # TypeScript configuration
 └── vitest.config.ts                    # Vitest configuration
 ```
+
 **Total Files**: 62+ files across the entire repository structure
 
 ---
 
 ## Rationale for Major Groups
+
 ## Rationale for Major Groups
 
 ### 1. **GitHub Automation (.github/)**
+
 **Why it exists:**
+
 - Automates code quality checks, testing, and deployment
 - Provides templates for consistent issue/PR management
 - Ensures security vulnerability tracking via Dependabot
 - Enables collaborative code ownership with CODEOWNERS
 
 **Key files:**
+
 - `workflows/ci.yml` - Runs lint, type-check, tests, and build on every push/PR
 - `dependabot.yml` - Automatically updates dependencies weekly
 - Issue templates - Standardized bug reports and feature requests
 
 ### 2. **Copilot Prompt System (.github/copilot/)**
+
 **Why it exists:**
+
 - Provides context for GitHub Copilot to generate better, project-specific code
 - Ensures consistency across the codebase by teaching Copilot the project standards
 - Speeds up development with task-specific patterns and examples
 - Documents best practices in a machine-readable format
 
 **Key features:**
+
 - `system.md` - Global instructions read automatically by Copilot
 - 11 task-specific prompts covering all development scenarios
 - Do/Don't lists and code examples for each task type
 - Quality checklists integrated into prompts
 
 ### 3. **Configuration Files (Root)**
+
 **Why they exist:**
+
 - Enforce consistent code style across the team
 - Automate formatting and linting
 - Define build and runtime behavior
 - Ensure cross-platform compatibility
 
 **Key configurations:**
+
 - `.editorconfig` - Universal editor settings
 - `.prettierrc.json` + `.eslintrc.json` - Code style enforcement
 - `tsconfig.json` - TypeScript strict mode
 - `next.config.ts` - Security headers and performance settings
 
 ### 4. **Git Hooks (.husky/)**
+
 **Why it exists:**
+
 - Prevents bad code from being committed
 - Runs linting and formatting automatically
 - Ensures tests pass before push
 - Maintains code quality gate at the developer level
 
 ### 5. **VS Code Settings (.vscode/)**
+
 **Why it exists:**
+
 - Optimizes the development experience in VS Code
 - Auto-formats on save
 - Recommends essential extensions
 - Provides debugging configurations
 
 **Key features:**
+
 - Automatic Prettier formatting
 - ESLint auto-fix on save
 - Tailwind IntelliSense configuration
 - Debug configurations for Next.js
 
 ### 6. **Documentation (docs/)**
+
 **Why it exists:**
+
 - Onboards new developers quickly
 - Documents architectural decisions
 - Provides coding standards reference
 - Guides Copilot usage for maximum productivity
 
 **Key documents:**
+
 - `architecture.md` - System design and patterns
 - `conventions.md` - Naming, structure, and style guide
 - `copilot-usage.md` - How to leverage the Copilot system
 
 ### 7. **Next.js Application (src/app/)**
+
 **Why it exists:**
+
 - Implements Next.js 15 App Router structure
 - Separates routes, API endpoints, and layouts
 - Provides error boundaries and loading states
 - Follows Server Components best practices
 
 **Structure:**
+
 - `page.tsx` - Route entry points
 - `layout.tsx` - Shared UI wrappers
 - `error.tsx` - Error handling
 - `api/` - Backend API routes
 
 ### 8. **Component Library (src/components/)**
+
 **Why it exists:**
+
 - Provides reusable UI building blocks
 - Maintains consistent design system
 - Separates presentational from feature components
 - Includes tests alongside components
 
 **Organization:**
+
 - `ui/` - Basic components (Button, Card)
 - Feature components at root level
 - `index.ts` - Barrel exports for clean imports
 
 ### 9. **Utilities (src/lib/)**
+
 **Why it exists:**
+
 - Centralizes shared functionality
 - Provides type-safe helpers
 - Implements error handling patterns
 - Contains validation and formatting logic
 
 **Key utilities:**
+
 - `logger.ts` - Structured logging
 - `errors.ts` - Custom error classes
 - `validation.ts` - Zod schemas
 - `format.ts` - Date/currency formatting
 
-### 10. **Testing (src/test/ + *.test.ts)**
+### 10. **Testing (src/test/ + \*.test.ts)**
+
 **Why it exists:**
+
 - Ensures code quality and correctness
 - Prevents regressions
 - Documents expected behavior
 - Uses fast Vitest framework
 
 **Setup:**
+
 - Vitest for unit/integration tests
 - React Testing Library for component tests
 - Tests colocated with source files
@@ -305,6 +337,7 @@ pnpm test:watch
 ### Step 6: Customize for Your Needs
 
 #### Adding a Database
+
 ```bash
 # Example with Prisma
 pnpm add -D prisma
@@ -316,6 +349,7 @@ npx prisma migrate dev
 ```
 
 #### Adding Authentication
+
 ```bash
 # Example with NextAuth.js
 pnpm add next-auth
@@ -323,6 +357,7 @@ pnpm add next-auth
 ```
 
 #### Adding UI Library
+
 ```bash
 # Example with Radix UI
 pnpm add @radix-ui/react-dialog
@@ -363,6 +398,7 @@ pnpm ci        # lint + type-check + test
 ### Step 9: Deploy
 
 #### Deploy to Vercel (Recommended)
+
 ```bash
 # Install Vercel CLI
 npm i -g vercel
@@ -374,6 +410,7 @@ vercel
 ```
 
 #### Deploy with Docker
+
 ```bash
 # Build image
 docker build -t my-app .
@@ -383,7 +420,9 @@ docker run -p 3000:3000 my-app
 ```
 
 #### Environment Variables for Production
+
 Set these in your deployment platform:
+
 - `NODE_ENV=production`
 - `NEXT_PUBLIC_APP_URL=https://yourdomain.com`
 - Database URLs
@@ -435,17 +474,20 @@ pnpm audit
 ## Features Checklist
 
 ✅ **Framework & Language**
+
 - [x] Next.js 15 with App Router
 - [x] TypeScript with strict mode
 - [x] React 18 with Server Components
 
 ✅ **Styling & UI**
+
 - [x] Tailwind CSS configured
 - [x] Sample components (Button, Card)
 - [x] Responsive design utilities
 - [x] Dark mode ready (CSS variables)
 
 ✅ **Code Quality**
+
 - [x] ESLint with Next.js rules
 - [x] Prettier for formatting
 - [x] EditorConfig for consistency
@@ -453,12 +495,14 @@ pnpm audit
 - [x] lint-staged for pre-commit
 
 ✅ **Testing**
+
 - [x] Vitest for unit tests
 - [x] React Testing Library
 - [x] Coverage reporting
 - [x] Example tests included
 
 ✅ **GitHub Automation**
+
 - [x] CI/CD workflow
 - [x] Dependabot configuration
 - [x] Issue templates
@@ -467,6 +511,7 @@ pnpm audit
 - [x] Security policy
 
 ✅ **Copilot Integration**
+
 - [x] Global system instructions
 - [x] 11 task-specific prompts
 - [x] Code patterns and examples
@@ -474,6 +519,7 @@ pnpm audit
 - [x] Usage documentation
 
 ✅ **Documentation**
+
 - [x] Comprehensive README
 - [x] Architecture guide
 - [x] Conventions guide
@@ -482,6 +528,7 @@ pnpm audit
 - [x] Contributing guidelines
 
 ✅ **Security**
+
 - [x] Security headers configured
 - [x] Input validation examples
 - [x] Error handling patterns
@@ -489,6 +536,7 @@ pnpm audit
 - [x] Secret management guide
 
 ✅ **Developer Experience**
+
 - [x] VS Code settings
 - [x] Extension recommendations
 - [x] Debug configurations
@@ -496,6 +544,7 @@ pnpm audit
 - [x] TypeScript IntelliSense
 
 ✅ **Performance**
+
 - [x] Server Components by default
 - [x] Image optimization (Next.js Image)
 - [x] Font optimization (next/font)

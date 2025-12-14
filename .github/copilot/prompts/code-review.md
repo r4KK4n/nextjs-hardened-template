@@ -1,17 +1,20 @@
 # Copilot Prompt: Code Review
 
 ## Context
+
 Guidelines for reviewing code to ensure quality, security, and maintainability.
 
 ## Review Checklist
 
 ### Functionality
+
 - [ ] Code works as intended
 - [ ] All requirements are met
 - [ ] Edge cases are handled
 - [ ] Error scenarios are covered
 
 ### Code Quality
+
 - [ ] Code is readable and maintainable
 - [ ] Functions are small and focused
 - [ ] No unnecessary complexity
@@ -19,18 +22,21 @@ Guidelines for reviewing code to ensure quality, security, and maintainability.
 - [ ] Naming is clear and consistent
 
 ### TypeScript
+
 - [ ] Proper types are used
 - [ ] No `any` without justification
 - [ ] Type guards where needed
 - [ ] Interfaces are well-defined
 
 ### Testing
+
 - [ ] Tests are included
 - [ ] Tests cover edge cases
 - [ ] Tests are meaningful
 - [ ] Tests pass locally
 
 ### Security
+
 - [ ] Input is validated
 - [ ] No SQL injection vulnerabilities
 - [ ] XSS is prevented
@@ -39,18 +45,21 @@ Guidelines for reviewing code to ensure quality, security, and maintainability.
 - [ ] Sensitive data is protected
 
 ### Performance
+
 - [ ] No obvious performance issues
 - [ ] Proper use of memoization
 - [ ] No unnecessary re-renders
 - [ ] Database queries are optimized
 
 ### Accessibility
+
 - [ ] Semantic HTML is used
 - [ ] ARIA labels are present
 - [ ] Keyboard navigation works
 - [ ] Color contrast is sufficient
 
 ### Style & Conventions
+
 - [ ] Follows project conventions
 - [ ] ESLint passes
 - [ ] Prettier formatted
@@ -60,13 +69,15 @@ Guidelines for reviewing code to ensure quality, security, and maintainability.
 ## Review Comments Template
 
 ### Blocking Issues (Must Fix)
+
 ```
 🚫 **Blocking**: Security issue
-This exposes user passwords in the response. Please exclude 
+This exposes user passwords in the response. Please exclude
 the password field from the user select statement.
 ```
 
 ### Important Suggestions (Should Fix)
+
 ```
 ⚠️ **Important**: Type safety
 Consider using a specific type instead of `any` here.
@@ -74,6 +85,7 @@ This will help catch errors at compile time.
 ```
 
 ### Nice to Have (Could Fix)
+
 ```
 💡 **Suggestion**: Code readability
 This could be simplified using array methods:
@@ -83,12 +95,14 @@ return items.filter(item => item.active).map(item => item.name);
 ```
 
 ### Positive Feedback
+
 ```
 ✅ **Great**: Error handling
 Excellent error handling with specific error types!
 ```
 
 ### Questions
+
 ```
 ❓ **Question**: Implementation choice
 Why was this approach chosen over using the built-in
@@ -98,6 +112,7 @@ method? Is there a specific performance benefit?
 ## Common Review Scenarios
 
 ### Security Vulnerability
+
 ```
 🚫 **Blocking**: SQL Injection vulnerability
 
@@ -113,6 +128,7 @@ const user = await db.user.findUnique({ where: { id: userId } });
 ```
 
 ### Missing Error Handling
+
 ```
 ⚠️ **Important**: Missing error handling
 
@@ -133,6 +149,7 @@ try {
 ```
 
 ### Type Safety Issue
+
 ```
 ⚠️ **Important**: Type safety
 
@@ -156,6 +173,7 @@ function process(data: Data): string {
 ```
 
 ### Performance Issue
+
 ```
 ⚠️ **Important**: Performance concern
 
@@ -172,6 +190,7 @@ const onClick = useCallback(() => handleClick(id), [id]);
 ```
 
 ### Code Duplication
+
 ```
 💡 **Suggestion**: DRY principle
 
@@ -185,6 +204,7 @@ function validateAndProcess(data: Data) {
 ```
 
 ### Missing Tests
+
 ```
 ⚠️ **Important**: Missing tests
 
@@ -195,6 +215,7 @@ Please add tests for:
 ```
 
 ### Accessibility Issue
+
 ```
 ⚠️ **Important**: Accessibility
 
@@ -216,6 +237,7 @@ Add aria-label:
 ## Review Best Practices
 
 ### Be Constructive
+
 ```
 ❌ Bad: "This code is terrible"
 ✅ Good: "This could be improved by..."
@@ -225,6 +247,7 @@ Add aria-label:
 ```
 
 ### Provide Context
+
 ```
 ❌ Bad: "Change this"
 ✅ Good: "This could cause memory leaks because..."
@@ -234,6 +257,7 @@ Add aria-label:
 ```
 
 ### Offer Solutions
+
 ```
 ❌ Bad: "This is wrong"
 ✅ Good: "Consider this approach instead: [code example]"
@@ -243,6 +267,7 @@ Add aria-label:
 ```
 
 ### Acknowledge Good Work
+
 ```
 ✅ "Great job on the error handling!"
 ✅ "Nice use of TypeScript generics here"
@@ -253,24 +278,28 @@ Add aria-label:
 ## Review Priority Levels
 
 ### P0 - Critical (Must Fix Before Merge)
+
 - Security vulnerabilities
 - Data loss risks
 - Breaking changes
 - Production-breaking bugs
 
 ### P1 - Important (Should Fix Before Merge)
+
 - Type safety issues
 - Missing error handling
 - Performance problems
 - Missing tests for critical paths
 
 ### P2 - Nice to Have (Can Fix Later)
+
 - Code style improvements
 - Refactoring opportunities
 - Additional test coverage
 - Documentation improvements
 
 ### P3 - Informational (Optional)
+
 - Alternative approaches
 - Learning opportunities
 - Future enhancements
@@ -281,6 +310,7 @@ Add aria-label:
 ### For Reviewers
 
 ✅ **Do:**
+
 - Review promptly
 - Be specific and constructive
 - Explain reasoning
@@ -290,6 +320,7 @@ Add aria-label:
 - Focus on important issues
 
 ❌ **Don't:**
+
 - Be vague or dismissive
 - Nitpick minor style issues
 - Make it personal
@@ -300,6 +331,7 @@ Add aria-label:
 ### For Authors
 
 ✅ **Do:**
+
 - Respond to all comments
 - Ask for clarification
 - Explain your reasoning
@@ -308,6 +340,7 @@ Add aria-label:
 - Mark conversations as resolved
 
 ❌ **Don't:**
+
 - Take feedback personally
 - Argue over minor points
 - Ignore comments
@@ -339,45 +372,56 @@ pnpm build
 
 ```markdown
 ## Summary
+
 Brief description of what was reviewed
 
 ## Functionality
+
 - ✅ Works as intended
 - ✅ Edge cases handled
 
 ## Code Quality
+
 - ✅ Readable and maintainable
 - ✅ Follows conventions
 
 ## Security
+
 - ✅ Input validated
 - ⚠️ Missing rate limiting on API route (see comments)
 
 ## Testing
+
 - ✅ Unit tests included
 - ⚠️ Missing integration tests
 
 ## Performance
+
 - ✅ No obvious issues
 
 ## Accessibility
+
 - ✅ Semantic HTML used
 - ✅ ARIA labels present
 
 ## Overall Assessment
+
 Looks good overall! A few important items to address:
+
 1. [Priority issue 1]
 2. [Priority issue 2]
 
 Nice work on [specific thing done well]!
 
 ## Approval
+
 - [ ] Approved pending changes
 - [ ] Approved as-is
 - [ ] Requires significant changes
 ```
 
 ## Related Prompts
+
 - `refactor.md` - For refactoring suggestions
 - `security-review.md` - For security-focused reviews
 - `performance.md` - For performance reviews

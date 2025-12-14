@@ -2,14 +2,14 @@
 
 /**
  * Template Verification Script
- * 
+ *
  * This script verifies that the template has been properly initialized by checking for:
  * 1. Absence of UNINITIALIZED marker
  * 2. No remaining placeholder tokens in the codebase
  * 3. Required files exist
- * 
+ *
  * Used in CI to prevent uninitialized templates from passing tests.
- * 
+ *
  * Exit codes:
  * - 0: All checks passed
  * - 1: Template is not initialized or placeholders remain
@@ -44,8 +44,28 @@ const log = {
 
 // Configuration
 const UNINITIALIZED_MARKER = join(ROOT_DIR, '.template', 'UNINITIALIZED');
-const TEXT_EXTENSIONS = ['.md', '.txt', '.json', '.yml', '.yaml', '.ts', '.tsx', '.js', '.mjs', '.css'];
-const EXCLUDE_DIRS = ['node_modules', '.git', '.next', 'dist', 'build', 'out', 'coverage', '.template'];
+const TEXT_EXTENSIONS = [
+  '.md',
+  '.txt',
+  '.json',
+  '.yml',
+  '.yaml',
+  '.ts',
+  '.tsx',
+  '.js',
+  '.mjs',
+  '.css',
+];
+const EXCLUDE_DIRS = [
+  'node_modules',
+  '.git',
+  '.next',
+  'dist',
+  'build',
+  'out',
+  'coverage',
+  '.template',
+];
 const EXCLUDE_FILES = [
   'template-init.mjs',
   'template-check.mjs',
@@ -58,7 +78,7 @@ const EXCLUDE_FILES = [
 const PLACEHOLDER_PATTERNS = [
   // Standard format
   /__[A-Z_]+__/g,
-  
+
   // Legacy placeholders (as whole words) - only actual placeholders, not example values
   /\bPROJECT_NAME\b/g,
   /\bDESCRIPTION\b/g,
@@ -81,7 +101,7 @@ function checkInitializationMarker() {
     log.error(`  ${colors.cyan}npm run template:init${colors.reset}\n`);
     return false;
   }
-  
+
   log.success('Initialization marker removed');
   return true;
 }
@@ -91,12 +111,12 @@ function checkInitializationMarker() {
  */
 function shouldScanFile(filePath) {
   const filename = filePath.split(sep).pop();
-  
+
   // Skip excluded files
   if (EXCLUDE_FILES.includes(filename)) {
     return false;
   }
-  
+
   const ext = filePath.substring(filePath.lastIndexOf('.'));
   return TEXT_EXTENSIONS.includes(ext);
 }
@@ -112,12 +132,12 @@ function findTextFiles(dir, files = []) {
     const relativePath = fullPath.replace(ROOT_DIR + sep, '');
 
     // Skip excluded directories
-    if (EXCLUDE_DIRS.some(excluded => relativePath.startsWith(excluded))) {
+    if (EXCLUDE_DIRS.some((excluded) => relativePath.startsWith(excluded))) {
       continue;
     }
 
     const stat = statSync(fullPath);
-    
+
     if (stat.isDirectory()) {
       findTextFiles(fullPath, files);
     } else if (stat.isFile() && shouldScanFile(fullPath)) {
@@ -160,7 +180,7 @@ function scanForPlaceholders() {
 
       if (placeholders.length > 0) {
         const relativePath = filePath.replace(ROOT_DIR + sep, '');
-        
+
         // Find line numbers for each placeholder
         const lines = content.split('\n');
         const details = [];
@@ -202,7 +222,7 @@ function displayIssues(issues) {
 
   for (const issue of issues) {
     console.log(`${colors.red}✗${colors.reset} ${colors.cyan}${issue.file}${colors.reset}`);
-    
+
     for (const detail of issue.placeholders) {
       console.log(`  Line ${detail.line}: ${colors.yellow}${detail.placeholder}${colors.reset}`);
       console.log(`    ${colors.reset}${detail.content}${colors.reset}`);
@@ -261,7 +281,7 @@ async function main() {
 
     // Check 3: Placeholder scan
     const issues = scanForPlaceholders();
-    
+
     if (issues.length > 0) {
       displayIssues(issues);
       log.error('Placeholders detected! Template initialization is incomplete.\n');
@@ -285,7 +305,6 @@ async function main() {
       log.error('Please fix the issues above and run this check again.\n');
       process.exit(1);
     }
-
   } catch (error) {
     log.error(`Verification failed: ${error.message}`);
     console.error(error);

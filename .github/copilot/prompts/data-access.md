@@ -1,9 +1,11 @@
 # Copilot Prompt: Data Access Layer
 
 ## Context
+
 Create clean, efficient data access patterns for database operations and external APIs.
 
 ## When to Use
+
 - Implementing database queries
 - Creating API clients
 - Building data repositories
@@ -152,10 +154,7 @@ export class ApiClient {
     private defaultHeaders: HeadersInit = {}
   ) {}
 
-  private async request<T>(
-    endpoint: string,
-    options: RequestOptions = {}
-  ): Promise<T> {
+  private async request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
     const { timeout = 10000, ...fetchOptions } = options;
 
     const controller = new AbortController();
@@ -176,11 +175,7 @@ export class ApiClient {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new ApiError(
-          errorData.message || 'Request failed',
-          response.status,
-          errorData
-        );
+        throw new ApiError(errorData.message || 'Request failed', response.status, errorData);
       }
 
       return response.json();
@@ -204,11 +199,7 @@ export class ApiClient {
     return this.request<T>(endpoint, { ...options, method: 'GET' });
   }
 
-  async post<T>(
-    endpoint: string,
-    data?: unknown,
-    options?: RequestOptions
-  ): Promise<T> {
+  async post<T>(endpoint: string, data?: unknown, options?: RequestOptions): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
       method: 'POST',
@@ -216,11 +207,7 @@ export class ApiClient {
     });
   }
 
-  async put<T>(
-    endpoint: string,
-    data?: unknown,
-    options?: RequestOptions
-  ): Promise<T> {
+  async put<T>(endpoint: string, data?: unknown, options?: RequestOptions): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
       method: 'PUT',
@@ -232,11 +219,7 @@ export class ApiClient {
     return this.request<T>(endpoint, { ...options, method: 'DELETE' });
   }
 
-  async patch<T>(
-    endpoint: string,
-    data?: unknown,
-    options?: RequestOptions
-  ): Promise<T> {
+  async patch<T>(endpoint: string, data?: unknown, options?: RequestOptions): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
       method: 'PATCH',
@@ -246,12 +229,9 @@ export class ApiClient {
 }
 
 // Usage
-export const apiClient = new ApiClient(
-  process.env.NEXT_PUBLIC_API_URL || '',
-  {
-    Authorization: `Bearer ${process.env.API_TOKEN}`,
-  }
-);
+export const apiClient = new ApiClient(process.env.NEXT_PUBLIC_API_URL || '', {
+  Authorization: `Bearer ${process.env.API_TOKEN}`,
+});
 ```
 
 ### Caching Layer
@@ -324,7 +304,7 @@ export function withCache<T extends (...args: any[]) => Promise<any>>(
 ): T {
   return (async (...args: Parameters<T>) => {
     const key = keyGenerator(...args);
-    
+
     const cached = cache.get(key);
     if (cached !== null) {
       return cached;
@@ -332,7 +312,7 @@ export function withCache<T extends (...args: any[]) => Promise<any>>(
 
     const result = await fn(...args);
     cache.set(key, result, ttl);
-    
+
     return result;
   }) as T;
 }
@@ -378,6 +358,7 @@ export function withCache<T extends (...args: any[]) => Promise<any>>(
 - [ ] Tests cover data operations
 
 ## Related Prompts
+
 - `api-route.md` - For API implementation
 - `server-action.md` - For Server Actions
 - `unit-tests.md` - For testing data access

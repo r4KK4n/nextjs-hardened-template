@@ -18,37 +18,37 @@ GitHub Actions secrets are encrypted environment variables that you create in yo
 
 ### CI/CD Pipeline
 
-| Secret Name | Required? | Description | Where to Obtain |
-|------------|-----------|-------------|-----------------|
-| None | - | Base CI pipeline works without secrets | - |
+| Secret Name | Required? | Description                            | Where to Obtain |
+| ----------- | --------- | -------------------------------------- | --------------- |
+| None        | -         | Base CI pipeline works without secrets | -               |
 
 ## Optional Secrets
 
 ### Code Coverage
 
-| Secret Name | Required? | Description | Where to Obtain |
-|------------|-----------|-------------|-----------------|
-| `CODECOV_TOKEN` | Optional | Codecov.io API token for uploading coverage reports | 1. Sign up at [codecov.io](https://codecov.io)<br>2. Add your repository<br>3. Copy the upload token |
+| Secret Name     | Required? | Description                                         | Where to Obtain                                                                                      |
+| --------------- | --------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `CODECOV_TOKEN` | Optional  | Codecov.io API token for uploading coverage reports | 1. Sign up at [codecov.io](https://codecov.io)<br>2. Add your repository<br>3. Copy the upload token |
 
 ### Deployment
 
-| Secret Name | Required? | Description | Where to Obtain |
-|------------|-----------|-------------|-----------------|
-| `VERCEL_TOKEN` | Optional | Vercel API token for automated deployments | 1. Go to [Vercel Account Settings](https://vercel.com/account/tokens)<br>2. Create new token<br>3. Copy the token value |
-| `VERCEL_ORG_ID` | Optional | Vercel organization/team ID | Found in Vercel project settings or `.vercel/project.json` after first deployment |
-| `VERCEL_PROJECT_ID` | Optional | Vercel project ID | Found in Vercel project settings or `.vercel/project.json` after first deployment |
+| Secret Name         | Required? | Description                                | Where to Obtain                                                                                                         |
+| ------------------- | --------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| `VERCEL_TOKEN`      | Optional  | Vercel API token for automated deployments | 1. Go to [Vercel Account Settings](https://vercel.com/account/tokens)<br>2. Create new token<br>3. Copy the token value |
+| `VERCEL_ORG_ID`     | Optional  | Vercel organization/team ID                | Found in Vercel project settings or `.vercel/project.json` after first deployment                                       |
+| `VERCEL_PROJECT_ID` | Optional  | Vercel project ID                          | Found in Vercel project settings or `.vercel/project.json` after first deployment                                       |
 
 ### Package Publishing
 
-| Secret Name | Required? | Description | Where to Obtain |
-|------------|-----------|-------------|-----------------|
-| `NPM_TOKEN` | Optional | npm registry authentication token (if publishing packages) | 1. Log in to [npmjs.com](https://www.npmjs.com)<br>2. Go to Access Tokens<br>3. Generate new token (Automation type)<br>4. Copy the token |
+| Secret Name | Required? | Description                                                | Where to Obtain                                                                                                                           |
+| ----------- | --------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `NPM_TOKEN` | Optional  | npm registry authentication token (if publishing packages) | 1. Log in to [npmjs.com](https://www.npmjs.com)<br>2. Go to Access Tokens<br>3. Generate new token (Automation type)<br>4. Copy the token |
 
 ### Notifications
 
-| Secret Name | Required? | Description | Where to Obtain |
-|------------|-----------|-------------|-----------------|
-| `SLACK_WEBHOOK_URL` | Optional | Slack webhook for CI notifications | 1. Go to Slack App settings<br>2. Create Incoming Webhook<br>3. Copy webhook URL |
+| Secret Name         | Required? | Description                        | Where to Obtain                                                                  |
+| ------------------- | --------- | ---------------------------------- | -------------------------------------------------------------------------------- |
+| `SLACK_WEBHOOK_URL` | Optional  | Slack webhook for CI notifications | 1. Go to Slack App settings<br>2. Create Incoming Webhook<br>3. Copy webhook URL |
 
 ## Environment-Specific Secrets
 
@@ -147,8 +147,8 @@ Use this checklist when setting up a new repository:
 
 If you need help with secrets configuration:
 
-- **Security team**: __SECURITY_EMAIL__
-- **DevOps team**: __SUPPORT_EMAIL__
+- **Security team**: **SECURITY_EMAIL**
+- **DevOps team**: **SUPPORT_EMAIL**
 - **Documentation**: `docs/` directory
 
 ---
