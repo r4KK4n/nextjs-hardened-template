@@ -1,4 +1,8 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+set -e
 
-pnpm lint-staged
+# Add node_modules/.bin to PATH for git hooks
+export PATH="$PWD/node_modules/.bin:$PATH"
+
+# Run lint-staged
+lint-staged
