@@ -1,9 +1,11 @@
 # Copilot Prompt: Bug Fix
 
 ## Context
+
 Systematically identify, diagnose, and fix bugs while preventing regression.
 
 ## When to Use
+
 - Application is crashing
 - Feature not working as expected
 - Unexpected error messages
@@ -58,27 +60,34 @@ Systematically identify, diagnose, and fix bugs while preventing regression.
 
 ```markdown
 ### Bug Description
+
 Clear description of the bug
 
 ### Expected Behavior
+
 What should happen
 
 ### Actual Behavior
+
 What actually happens
 
 ### Steps to Reproduce
+
 1. Step one
 2. Step two
 3. Step three
 
 ### Environment
+
 - OS: [e.g., macOS 14]
 - Browser: [e.g., Chrome 120]
 - Version: [e.g., 0.1.0]
 
 ### Stack Trace
 ```
+
 Error stack trace here
+
 ```
 
 ### Additional Context
@@ -117,9 +126,9 @@ Screenshots, logs, etc.
 // Before: Crashes when user is not found
 export async function getUserProfile(userId: string) {
   const user = await db.user.findUnique({
-    where: { id: userId }
+    where: { id: userId },
   });
-  
+
   // Bug: user might be null
   return {
     name: user.name,
@@ -130,13 +139,13 @@ export async function getUserProfile(userId: string) {
 // After: Proper null handling
 export async function getUserProfile(userId: string) {
   const user = await db.user.findUnique({
-    where: { id: userId }
+    where: { id: userId },
   });
-  
+
   if (!user) {
     throw new NotFoundError('User');
   }
-  
+
   return {
     name: user.name,
     email: user.email,
@@ -146,11 +155,9 @@ export async function getUserProfile(userId: string) {
 // Test to prevent regression
 describe('getUserProfile', () => {
   it('should throw NotFoundError when user does not exist', async () => {
-    await expect(getUserProfile('invalid-id'))
-      .rejects
-      .toThrow(NotFoundError);
+    await expect(getUserProfile('invalid-id')).rejects.toThrow(NotFoundError);
   });
-  
+
   it('should return user profile when user exists', async () => {
     const profile = await getUserProfile('valid-id');
     expect(profile).toHaveProperty('name');
@@ -166,15 +173,15 @@ describe('getUserProfile', () => {
 function useData() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+
   useEffect(() => {
     setLoading(true);
-    fetchData().then(result => {
+    fetchData().then((result) => {
       setData(result);
       setLoading(false);
     });
   }, []);
-  
+
   return { data, loading };
 }
 
@@ -182,23 +189,23 @@ function useData() {
 function useData() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+
   useEffect(() => {
     let cancelled = false;
-    
+
     setLoading(true);
-    fetchData().then(result => {
+    fetchData().then((result) => {
       if (!cancelled) {
         setData(result);
         setLoading(false);
       }
     });
-    
+
     return () => {
       cancelled = true;
     };
   }, []);
-  
+
   return { data, loading };
 }
 ```
@@ -230,9 +237,9 @@ describe('processBatch', () => {
   it('should process all items', () => {
     const mockProcess = vi.fn();
     const items = ['a', 'b', 'c'];
-    
+
     processBatch(items);
-    
+
     expect(mockProcess).toHaveBeenCalledTimes(3);
   });
 });
@@ -241,6 +248,7 @@ describe('processBatch', () => {
 ## Common Bug Patterns
 
 ### Null/Undefined Errors
+
 ```typescript
 // Check before access
 if (user?.profile?.address) {
@@ -252,6 +260,7 @@ const name = user?.name ?? 'Anonymous';
 ```
 
 ### Async/Await Errors
+
 ```typescript
 // Always handle promise rejections
 try {
@@ -262,19 +271,23 @@ try {
 ```
 
 ### Type Coercion Issues
+
 ```typescript
 // Be explicit with comparisons
-if (value === 0) { } // not: if (value) { }
-if (array.length === 0) { } // not: if (!array.length) { }
+if (value === 0) {
+} // not: if (value) { }
+if (array.length === 0) {
+} // not: if (!array.length) { }
 ```
 
 ### Memory Leaks
+
 ```typescript
 // Clean up event listeners
 useEffect(() => {
-  const handler = () => { };
+  const handler = () => {};
   window.addEventListener('resize', handler);
-  
+
   return () => {
     window.removeEventListener('resize', handler);
   };
@@ -282,6 +295,7 @@ useEffect(() => {
 ```
 
 ### Mutation Bugs
+
 ```typescript
 // Don't mutate state directly
 // Bad
@@ -294,6 +308,7 @@ setState({ ...state, items: [...state.items, newItem] });
 ## Debugging Techniques
 
 ### Console Logging
+
 ```typescript
 console.log('Debug:', variable);
 console.table(arrayOfObjects);
@@ -301,6 +316,7 @@ console.trace('Function call stack');
 ```
 
 ### Debugger Statement
+
 ```typescript
 function problematicFunction() {
   debugger; // Execution pauses here
@@ -309,12 +325,13 @@ function problematicFunction() {
 ```
 
 ### Error Boundaries
+
 ```typescript
 class ErrorBoundary extends React.Component {
   componentDidCatch(error, errorInfo) {
     logError(error, errorInfo);
   }
-  
+
   render() {
     if (this.state.hasError) {
       return <ErrorFallback />;
@@ -372,6 +389,7 @@ Fixes #456
 ```
 
 ## Related Prompts
+
 - `unit-tests.md` - For testing fixes
 - `code-review.md` - For reviewing fixes
 - `refactor.md` - For larger fixes requiring refactoring

@@ -65,12 +65,9 @@ export async function POST(request: Request) {
   // Rate limiting
   const ip = request.headers.get('x-forwarded-for') ?? 'unknown';
   const { success } = await ratelimit.limit(ip);
-  
+
   if (!success) {
-    return NextResponse.json(
-      { error: 'Too many requests' },
-      { status: 429 }
-    );
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
   }
 
   try {
@@ -81,10 +78,7 @@ export async function POST(request: Request) {
     // Check authentication
     const session = await getServerSession();
     if (!session) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Process request
@@ -93,17 +87,11 @@ export async function POST(request: Request) {
     return NextResponse.json(result);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Validation failed' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Validation failed' }, { status: 400 });
     }
 
     // Don't expose internal errors
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 ```
@@ -124,10 +112,10 @@ const isValid = await bcrypt.compare(password, hashedPassword);
 
 ```typescript
 cookies().set('session', sessionId, {
-  httpOnly: true,  // Prevent JavaScript access
-  secure: process.env.NODE_ENV === 'production',  // HTTPS only
-  sameSite: 'strict',  // CSRF protection
-  maxAge: 60 * 60 * 24 * 7,  // 1 week
+  httpOnly: true, // Prevent JavaScript access
+  secure: process.env.NODE_ENV === 'production', // HTTPS only
+  sameSite: 'strict', // CSRF protection
+  maxAge: 60 * 60 * 24 * 7, // 1 week
 });
 ```
 
@@ -136,6 +124,7 @@ cookies().set('session', sessionId, {
 Use this checklist for code reviews:
 
 ### Authentication
+
 - [ ] Password hashing used (bcrypt, argon2)
 - [ ] Session tokens are cryptographically secure
 - [ ] Sessions expire appropriately
@@ -143,12 +132,14 @@ Use this checklist for code reviews:
 - [ ] Account lockout after failed attempts
 
 ### Authorization
+
 - [ ] User permissions checked
 - [ ] Resource ownership verified
 - [ ] Admin-only routes protected
 - [ ] API endpoints require auth
 
 ### Input Validation
+
 - [ ] All inputs validated on server
 - [ ] Type checking enforced
 - [ ] Length limits applied
@@ -156,18 +147,21 @@ Use this checklist for code reviews:
 - [ ] File uploads validated
 
 ### XSS Prevention
+
 - [ ] User content escaped
 - [ ] CSP headers configured
 - [ ] No dangerouslySetInnerHTML
 - [ ] Proper React rendering
 
 ### CSRF Protection
+
 - [ ] CSRF tokens implemented
 - [ ] SameSite cookies used
 - [ ] Origin headers checked
 - [ ] State-changing ops use POST
 
 ### Data Protection
+
 - [ ] Sensitive data encrypted
 - [ ] HTTPS enforced
 - [ ] Secrets in environment vars
@@ -175,12 +169,14 @@ Use this checklist for code reviews:
 - [ ] Secure cookie flags set
 
 ### Error Handling
+
 - [ ] No sensitive info in errors
 - [ ] Stack traces hidden in prod
 - [ ] Generic error messages
 - [ ] Errors logged securely
 
 ### Dependencies
+
 - [ ] No known vulnerabilities (pnpm audit)
 - [ ] Dependencies up to date
 - [ ] Minimal dependencies
@@ -193,6 +189,7 @@ Use this checklist for code reviews:
 Instead, email: SECURITY_EMAIL@example.com
 
 Include:
+
 - Description of the vulnerability
 - Steps to reproduce
 - Potential impact
@@ -203,18 +200,22 @@ We will respond within 48 hours.
 ## Security Tools
 
 ### Dependency Scanning
+
 ```bash
 pnpm audit
 pnpm audit fix
 ```
 
 ### ESLint Security
+
 ```bash
 pnpm add -D eslint-plugin-security
 ```
 
 ### TypeScript
+
 Enable strict mode in `tsconfig.json`:
+
 ```json
 {
   "compilerOptions": {
@@ -233,6 +234,7 @@ Enable strict mode in `tsconfig.json`:
 ## Updates
 
 This document should be reviewed and updated:
+
 - Quarterly (minimum)
 - When adding new features
 - After security incidents

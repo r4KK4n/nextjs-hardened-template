@@ -26,6 +26,7 @@ If `.template/UNINITIALIZED` exists:
 4. **Reference** `.template/PLACEHOLDERS.md` for placeholder documentation
 
 Example response:
+
 ```
 ⚠️ This template is not initialized yet.
 
@@ -42,6 +43,7 @@ See .template/PLACEHOLDERS.md for details on what will be configured.
 ### After Initialization
 
 Once initialized (`.template/UNINITIALIZED` is removed):
+
 - Proceed normally with development tasks
 - Ensure all generated code follows project conventions
 - Reference `.github/copilot/system.md` for coding standards
@@ -65,6 +67,7 @@ Once initialized (`.template/UNINITIALIZED` is removed):
 ### Examples
 
 **Correct:**
+
 ```bash
 # Local development
 npm ci
@@ -74,6 +77,7 @@ npm ci --ignore-scripts
 ```
 
 **Incorrect:**
+
 ```bash
 npm install           # ❌ NEVER use
 npm i                 # ❌ NEVER use
@@ -92,6 +96,7 @@ When suggesting or adding dependencies:
    - Known maintainers
 
 2. **Review install scripts**
+
    ```bash
    npm show <package> scripts
    ```
@@ -159,6 +164,7 @@ This repository includes specialized Copilot prompts in `.github/prompts/`:
 - `template-init.prompt.md` - Template initialization guide
 
 To use a prompt:
+
 ```
 @workspace /template-init
 ```
@@ -223,6 +229,7 @@ See `.github/CODEOWNERS` for review requirements.
 ## Support
 
 For questions about:
+
 - **Template initialization**: See `.template/PLACEHOLDERS.md`
 - **Security policy**: See `docs/npm-scripts-policy.md`
 - **GitHub secrets**: See `docs/secrets.md`

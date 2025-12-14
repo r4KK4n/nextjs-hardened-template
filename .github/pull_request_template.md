@@ -1,7 +1,9 @@
 ## Description
+
 <!-- Provide a brief description of the changes in this PR -->
 
 ## Type of Change
+
 <!-- Mark the relevant option with an "x" -->
 
 - [ ] Bug fix (non-breaking change which fixes an issue)
@@ -14,18 +16,21 @@
 - [ ] Build/CI update
 
 ## Related Issues
+
 <!-- Link related issues here using #issue_number -->
 
 Closes #
 
 ## Changes Made
+
 <!-- List the main changes made in this PR -->
 
-- 
-- 
-- 
+-
+-
+-
 
 ## Testing
+
 <!-- Describe how you tested these changes -->
 
 - [ ] Unit tests pass locally
@@ -33,9 +38,11 @@ Closes #
 - [ ] Manual testing performed
 
 ## Screenshots (if applicable)
+
 <!-- Add screenshots to help explain your changes -->
 
 ## Checklist
+
 <!-- Mark completed items with an "x" -->
 
 - [ ] My code follows the project's style guidelines
@@ -48,4 +55,5 @@ Closes #
 - [ ] Any dependent changes have been merged and published
 
 ## Additional Notes
+
 <!-- Add any additional notes or context about the PR here -->

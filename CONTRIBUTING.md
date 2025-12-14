@@ -75,6 +75,7 @@ pnpm dev
 ## Project Structure
 
 Please follow the established structure:
+
 - Components in `/src/components/`
 - Utilities in `/src/lib/`
 - Types in `/src/types/`
@@ -85,24 +86,28 @@ See [docs/conventions.md](./docs/conventions.md) for detailed guidelines.
 ## Coding Guidelines
 
 ### TypeScript
+
 - Use strict mode
 - Define proper types/interfaces
 - Avoid `any` (use `unknown` if needed)
 - Use type guards for runtime checks
 
 ### React
+
 - Prefer functional components
 - Use Server Components by default
 - Add 'use client' only when needed
 - Follow hooks rules
 
 ### Testing
+
 - Write tests for new features
 - Test edge cases
 - Keep tests focused and clear
 - Use descriptive test names
 
 ### Commits
+
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
@@ -114,6 +119,7 @@ type(scope): subject
 ```
 
 **Types:**
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation

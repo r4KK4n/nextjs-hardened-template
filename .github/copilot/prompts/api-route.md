@@ -1,9 +1,11 @@
 # Copilot Prompt: API Route
 
 ## Context
+
 Create a new API route handler for Next.js App Router following RESTful principles and project conventions.
 
 ## When to Use
+
 - Creating new API endpoints
 - Implementing CRUD operations
 - Building internal APIs
@@ -56,18 +58,15 @@ const requestSchema = z.object({
   // Define schema
 });
 
-export async function METHOD(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function METHOD(request: Request, { params }: { params: { id: string } }) {
   try {
     // Parse and validate request
     const body = await request.json();
     const validatedData = requestSchema.parse(body);
-    
+
     // Business logic
     const result = await performOperation(validatedData);
-    
+
     // Return success response
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
@@ -78,11 +77,8 @@ export async function METHOD(
         { status: 400 }
       );
     }
-    
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 ```
@@ -132,37 +128,28 @@ const createUserSchema = z.object({
  * GET /api/users/[id]
  * Retrieve a user by ID
  */
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
     const userId = params.id;
-    
+
     // Fetch user from database
     const user = await getUserById(userId);
-    
+
     if (!user) {
       throw new NotFoundError('User');
     }
-    
+
     logger.info('User retrieved', { userId });
-    
+
     return NextResponse.json(user);
   } catch (error) {
     logger.error('Failed to get user', error);
-    
+
     if (error instanceof NotFoundError) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: error.message }, { status: 404 });
     }
-    
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -175,22 +162,22 @@ export async function POST(request: Request) {
     // Parse and validate request body
     const body = await request.json();
     const validatedData = createUserSchema.parse(body);
-    
+
     // Check if user already exists
     const existingUser = await getUserByEmail(validatedData.email);
     if (existingUser) {
       throw new ValidationError('User with this email already exists');
     }
-    
+
     // Create user
     const newUser = await createUser(validatedData);
-    
+
     logger.info('User created', { userId: newUser.id });
-    
+
     return NextResponse.json(newUser, { status: 201 });
   } catch (error) {
     logger.error('Failed to create user', error);
-    
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
@@ -200,18 +187,12 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-    
+
     if (error instanceof ValidationError) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: error.message }, { status: 400 });
     }
-    
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -219,46 +200,37 @@ export async function POST(request: Request) {
  * PUT /api/users/[id]
  * Update a user
  */
-export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
     const userId = params.id;
     const body = await request.json();
     const validatedData = createUserSchema.partial().parse(body);
-    
+
     // Update user
     const updatedUser = await updateUser(userId, validatedData);
-    
+
     if (!updatedUser) {
       throw new NotFoundError('User');
     }
-    
+
     logger.info('User updated', { userId });
-    
+
     return NextResponse.json(updatedUser);
   } catch (error) {
     logger.error('Failed to update user', error);
-    
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'Validation failed', details: error.errors },
         { status: 400 }
       );
     }
-    
+
     if (error instanceof NotFoundError) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: error.message }, { status: 404 });
     }
-    
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -266,35 +238,23 @@ export async function PUT(
  * DELETE /api/users/[id]
  * Delete a user
  */
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
     const userId = params.id;
-    
+
     await deleteUser(userId);
-    
+
     logger.info('User deleted', { userId });
-    
-    return NextResponse.json(
-      { message: 'User deleted successfully' },
-      { status: 200 }
-    );
+
+    return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
   } catch (error) {
     logger.error('Failed to delete user', error);
-    
+
     if (error instanceof NotFoundError) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: error.message }, { status: 404 });
     }
-    
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -334,6 +294,7 @@ async function deleteUser(id: string) {
 - [ ] Edge cases are handled
 
 ## Related Prompts
+
 - `server-action.md` - For Server Actions
 - `data-access.md` - For database operations
 - `unit-tests.md` - For testing routes

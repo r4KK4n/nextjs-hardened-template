@@ -1,9 +1,11 @@
 # Copilot Prompt: Code Refactoring
 
 ## Context
+
 Improve existing code structure, readability, and maintainability without changing external behavior.
 
 ## When to Use
+
 - Code is difficult to understand
 - Functions are too large or complex
 - Code has duplication
@@ -53,6 +55,7 @@ Improve existing code structure, readability, and maintainability without changi
 ## Common Refactoring Patterns
 
 ### Extract Function
+
 ```typescript
 // Before
 function processOrder(order: Order) {
@@ -63,18 +66,18 @@ function processOrder(order: Order) {
   if (!order.customer) {
     throw new Error('Order must have customer');
   }
-  
+
   // Calculate total
   let total = 0;
   for (const item of order.items) {
     total += item.price * item.quantity;
   }
-  
+
   // Apply discount
   if (order.customer.isPremium) {
     total *= 0.9;
   }
-  
+
   return total;
 }
 
@@ -104,12 +107,13 @@ function applyDiscount(amount: number, customer: Customer): number {
 ```
 
 ### Extract Component
+
 ```typescript
 // Before
 function UserDashboard() {
   const [user, setUser] = useState<User | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
-  
+
   return (
     <div>
       <div className="user-profile">
@@ -118,7 +122,7 @@ function UserDashboard() {
         <p>{user?.email}</p>
         <button>Edit Profile</button>
       </div>
-      
+
       <div className="user-posts">
         <h3>Recent Posts</h3>
         {posts.map(post => (
@@ -137,7 +141,7 @@ function UserDashboard() {
 function UserDashboard() {
   const [user, setUser] = useState<User | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
-  
+
   return (
     <div>
       <UserProfile user={user} />
@@ -148,7 +152,7 @@ function UserDashboard() {
 
 function UserProfile({ user }: { user: User | null }) {
   if (!user) return null;
-  
+
   return (
     <div className="user-profile">
       <img src={user.avatar} alt={user.name} />
@@ -182,6 +186,7 @@ function PostPreview({ post }: { post: Post }) {
 ```
 
 ### Simplify Conditionals
+
 ```typescript
 // Before
 function getShippingCost(order: Order): number {
@@ -209,6 +214,7 @@ function getShippingCost(order: Order): number {
 ```
 
 ### Replace Magic Numbers
+
 ```typescript
 // Before
 function calculateDiscount(price: number, quantity: number): number {
@@ -238,6 +244,7 @@ function calculateDiscount(price: number, quantity: number): number {
 ```
 
 ### Improve Type Safety
+
 ```typescript
 // Before
 function processData(data: any) {
@@ -313,67 +320,85 @@ function processData(data: RawData): ProcessedData {
 ## Code Smells to Look For
 
 ### Long Method
+
 - **Problem**: Function does too much
 - **Solution**: Extract smaller functions
 
 ### Large Class/Component
+
 - **Problem**: Too many responsibilities
 - **Solution**: Split into smaller pieces
 
 ### Duplicated Code
+
 - **Problem**: Same logic in multiple places
 - **Solution**: Extract to shared function
 
 ### Long Parameter List
+
 - **Problem**: Function takes too many parameters
 - **Solution**: Use object parameter or split function
 
 ### Primitive Obsession
+
 - **Problem**: Using primitives instead of objects
 - **Solution**: Create proper types/interfaces
 
 ### Nested Conditionals
+
 - **Problem**: Deep if/else nesting
 - **Solution**: Use early returns or guard clauses
 
 ### Dead Code
+
 - **Problem**: Unused code
 - **Solution**: Remove it
 
 ### Comments Explaining Code
+
 - **Problem**: Code needs explanation
 - **Solution**: Make code self-explanatory
 
 ## Refactoring Techniques
 
 ### Extract Method
+
 Break large functions into smaller ones
 
 ### Inline Method
+
 Combine overly fragmented functions
 
 ### Extract Variable
+
 Give intermediate results meaningful names
 
 ### Rename
+
 Use descriptive names
 
 ### Extract Class/Component
+
 Split large classes/components
 
 ### Move Method/Function
+
 Place code where it belongs
 
 ### Replace Conditional with Polymorphism
+
 Use type system instead of conditionals
 
 ### Introduce Parameter Object
+
 Group related parameters
 
 ### Remove Dead Code
+
 Delete unused code
 
 ### Simplify Conditional
+
 Make conditions easier to understand
 
 ## Example: Complete Refactoring
@@ -382,35 +407,35 @@ Make conditions easier to understand
 // Before: Complex, hard to test, mixed concerns
 async function handleUserRegistration(req: Request) {
   const body = await req.json();
-  
+
   if (!body.email || !body.password || !body.name) {
     return new Response('Missing fields', { status: 400 });
   }
-  
+
   if (body.password.length < 8) {
     return new Response('Password too short', { status: 400 });
   }
-  
+
   const existingUser = await db.user.findUnique({
-    where: { email: body.email }
+    where: { email: body.email },
   });
-  
+
   if (existingUser) {
     return new Response('User exists', { status: 409 });
   }
-  
+
   const hashedPassword = await hash(body.password);
-  
+
   const user = await db.user.create({
     data: {
       email: body.email,
       password: hashedPassword,
       name: body.name,
-    }
+    },
   });
-  
+
   await sendWelcomeEmail(user.email);
-  
+
   return new Response(JSON.stringify(user), { status: 201 });
 }
 
@@ -429,13 +454,13 @@ async function handleUserRegistration(req: Request) {
   try {
     const body = await req.json();
     const data = validateRegistrationData(body);
-    
+
     await checkUserDoesNotExist(data.email);
-    
+
     const user = await createUser(data);
-    
+
     await sendWelcomeEmail(user.email);
-    
+
     return NextResponse.json(user, { status: 201 });
   } catch (error) {
     return handleRegistrationError(error);
@@ -448,9 +473,9 @@ function validateRegistrationData(data: unknown): RegistrationData {
 
 async function checkUserDoesNotExist(email: string): Promise<void> {
   const existingUser = await db.user.findUnique({
-    where: { email }
+    where: { email },
   });
-  
+
   if (existingUser) {
     throw new ValidationError('User already exists');
   }
@@ -458,13 +483,13 @@ async function checkUserDoesNotExist(email: string): Promise<void> {
 
 async function createUser(data: RegistrationData) {
   const hashedPassword = await hash(data.password);
-  
+
   return db.user.create({
     data: {
       email: data.email,
       password: hashedPassword,
       name: data.name,
-    }
+    },
   });
 }
 
@@ -475,22 +500,17 @@ function handleRegistrationError(error: unknown): Response {
       { status: 400 }
     );
   }
-  
+
   if (error instanceof ValidationError) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 409 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 409 });
   }
-  
-  return NextResponse.json(
-    { error: 'Internal server error' },
-    { status: 500 }
-  );
+
+  return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
 }
 ```
 
 ## Related Prompts
+
 - `unit-tests.md` - For testing refactored code
 - `performance.md` - For performance refactoring
 - `code-review.md` - For review after refactoring

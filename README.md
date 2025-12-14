@@ -63,6 +63,7 @@ npm run template:init
 ```
 
 The wizard will prompt for:
+
 - **Project Name** (detected from directory name)
 - **Description**
 - **Author** (detected from git config)
@@ -273,6 +274,7 @@ Located in `.github/copilot/prompts/`:
 ### Security Headers
 
 Configured in `next.config.ts`:
+
 - X-Content-Type-Options
 - X-Frame-Options
 - X-XSS-Protection

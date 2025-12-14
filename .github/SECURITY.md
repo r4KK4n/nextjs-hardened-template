@@ -13,10 +13,12 @@ We release patches for security vulnerabilities. Currently supported versions:
 We take security seriously. If you discover a security vulnerability, please follow these steps:
 
 ### Do NOT:
+
 - Open a public issue
 - Disclose the vulnerability publicly until it has been addressed
 
 ### DO:
+
 1. **Email us directly** at: SECURITY_EMAIL@example.com
 2. Include:
    - Description of the vulnerability
@@ -25,11 +27,13 @@ We take security seriously. If you discover a security vulnerability, please fol
    - Any suggested fixes (if available)
 
 ### What to Expect:
+
 - **Initial Response**: Within 48 hours
 - **Status Updates**: Every 7 days until resolved
 - **Resolution Time**: Varies based on severity and complexity
 
 ### Severity Levels:
+
 - **Critical**: Response within 24 hours, patch within 7 days
 - **High**: Response within 48 hours, patch within 14 days
 - **Medium**: Response within 72 hours, patch within 30 days
@@ -67,6 +71,7 @@ When using this template:
 ## Security Features in Template
 
 This template includes:
+
 - Security headers in `next.config.ts`
 - ESLint security rules
 - Dependabot configuration
@@ -76,6 +81,7 @@ This template includes:
 ## Disclosure Policy
 
 Once a vulnerability is fixed:
+
 1. We will notify reporters
 2. Release a security patch
 3. Publish a security advisory

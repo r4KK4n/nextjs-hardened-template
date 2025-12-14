@@ -1,11 +1,13 @@
 # Copilot Prompt: Dependency Management
 
 ## Context
+
 This prompt guides adding, updating, or removing npm/pnpm dependencies with security-first practices to prevent supply-chain attacks.
 
 ---
 
 ## When to Use This Prompt
+
 - Adding a new package dependency
 - Updating existing dependencies
 - Removing unused dependencies
@@ -36,6 +38,7 @@ npm show <package-name> scripts
 ```
 
 **Evaluation Checklist:**
+
 - [ ] Has >10k weekly downloads (or justified niche package)
 - [ ] Updated within last 6 months
 - [ ] Has GitHub repository with source code
@@ -155,7 +158,7 @@ pnpm test && pnpm build
 
 # ❌ WRONG - Insecure installation
 - name: Install dependencies
-  run: pnpm install  # Missing --frozen-lockfile and --ignore-scripts
+  run: pnpm install # Missing --frozen-lockfile and --ignore-scripts
 ```
 
 ---
@@ -163,6 +166,7 @@ pnpm test && pnpm build
 ## Do's
 
 ✅ **DO:**
+
 - Research packages before adding them
 - Check for install scripts (npm show <pkg> scripts)
 - Use `--frozen-lockfile --ignore-scripts` in CI
@@ -177,9 +181,10 @@ pnpm test && pnpm build
 - Use pnpm instead of npm (faster, more secure)
 
 ✅ **DO in CI:**
+
 ```yaml
 - run: pnpm install --frozen-lockfile --ignore-scripts
-- run: npm ci --ignore-scripts  # If using npm
+- run: npm ci --ignore-scripts # If using npm
 ```
 
 ---
@@ -187,6 +192,7 @@ pnpm test && pnpm build
 ## Don'ts
 
 ❌ **DON'T:**
+
 - Add dependencies without researching them first
 - Use `npm install` or `pnpm install` in CI without flags
 - Ignore packages with install/postinstall scripts
@@ -201,11 +207,12 @@ pnpm test && pnpm build
 - Ignore Dependabot security alerts
 
 ❌ **DON'T in CI:**
+
 ```yaml
 # NEVER do these:
-- run: npm install  # Non-deterministic, runs scripts
-- run: pnpm install  # Missing --frozen-lockfile and --ignore-scripts
-- run: pnpm add <package>  # Don't install packages in CI
+- run: npm install # Non-deterministic, runs scripts
+- run: pnpm install # Missing --frozen-lockfile and --ignore-scripts
+- run: pnpm add <package> # Don't install packages in CI
 ```
 
 ---
@@ -252,14 +259,14 @@ export function formatDate(date: string): string {
  * Last Updated: 2023-01-15 ⚠️ (RED FLAG: Over 1 year old)
  * Install Scripts: postinstall: "node install.js" 🚨 (RED FLAG)
  * Security: Unknown maintainer, no source repository
- * 
+ *
  * RECOMMENDATION: ❌ DO NOT INSTALL
  * Reasons:
  * - Very low downloads (possible typosquatting)
  * - Has postinstall script (could be malicious)
  * - No source code repository (can't audit)
  * - Not actively maintained
- * 
+ *
  * Alternative: Implement the utility function yourself or use lodash
  */
 ```
@@ -278,24 +285,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-      
+
       # ✅ SECURE: frozen lockfile + ignore scripts
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --ignore-scripts
-      
+
       - name: Run tests
         run: pnpm test
-      
+
       - name: Build
         run: pnpm build
 ```

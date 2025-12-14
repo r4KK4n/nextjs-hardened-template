@@ -1,9 +1,11 @@
 # Copilot Prompt: Server Action
 
 ## Context
+
 Create a Server Action for Next.js App Router to handle form submissions and mutations directly from components.
 
 ## When to Use
+
 - Handling form submissions
 - Performing mutations from client components
 - Progressive enhancement scenarios
@@ -58,10 +60,7 @@ type ActionState = {
   errors?: Record<string, string[]>;
 };
 
-export async function actionName(
-  prevState: ActionState,
-  formData: FormData
-): Promise<ActionState> {
+export async function actionName(prevState: ActionState, formData: FormData): Promise<ActionState> {
   try {
     // Validate input
     const validatedFields = schema.safeParse({
@@ -219,7 +218,7 @@ export async function createPost(
     };
   } catch (error) {
     logger.error('Failed to create post', error);
-    
+
     return {
       success: false,
       message: 'Failed to create post. Please try again.',
@@ -289,7 +288,7 @@ export async function updatePost(
     };
   } catch (error) {
     logger.error('Failed to update post', error);
-    
+
     return {
       success: false,
       message: 'Failed to update post',
@@ -338,7 +337,7 @@ export async function deletePost(postId: string): Promise<CreatePostState> {
     };
   } catch (error) {
     logger.error('Failed to delete post', error);
-    
+
     return {
       success: false,
       message: 'Failed to delete post',
@@ -365,7 +364,7 @@ import { createPost } from './actions';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
-  
+
   return (
     <button type="submit" disabled={pending}>
       {pending ? 'Creating...' : 'Create Post'}
@@ -387,7 +386,7 @@ export function CreatePostForm() {
           <p className="text-red-500">{state.errors.title[0]}</p>
         )}
       </div>
-      
+
       <div>
         <label htmlFor="content">Content</label>
         <textarea id="content" name="content" required />
@@ -395,16 +394,16 @@ export function CreatePostForm() {
           <p className="text-red-500">{state.errors.content[0]}</p>
         )}
       </div>
-      
+
       <div>
         <label>
           <input type="checkbox" name="published" value="true" />
           Publish immediately
         </label>
       </div>
-      
+
       <SubmitButton />
-      
+
       {state.message && (
         <p className={state.success ? 'text-green-500' : 'text-red-500'}>
           {state.message}
@@ -429,6 +428,7 @@ export function CreatePostForm() {
 - [ ] Tests are written
 
 ## Related Prompts
+
 - `api-route.md` - For API endpoints
 - `data-access.md` - For database operations
 - `nextjs-component.md` - For components using actions
