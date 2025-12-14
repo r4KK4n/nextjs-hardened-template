@@ -171,6 +171,57 @@ To use a prompt:
 
 ---
 
+## Git Workflow - Feature Branches Required
+
+### ⚠️ NEVER Push Directly to Main
+
+**All changes**, regardless of type, must go through feature branches and pull requests:
+
+1. **Create feature branch** from `main`:
+   ```bash
+   git checkout main
+   git pull origin main
+   git checkout -b <branch-type>/<description>
+   ```
+
+2. **Make changes** on the feature branch
+
+3. **Commit with descriptive messages**:
+   ```bash
+   git add .
+   git commit -m "type: description"
+   ```
+
+4. **Push to feature branch**:
+   ```bash
+   git push -u origin <branch-type>/<description>
+   ```
+
+5. **Create Pull Request** on GitHub
+   - Link related issues
+   - Provide clear description
+   - Request code review from CODEOWNERS
+
+6. **Wait for approval** before merging
+
+### Branch Naming Convention
+
+- `feature/` - New features
+- `chore/` - Maintenance, dependency updates, tooling
+- `fix/` - Bug fixes
+- `docs/` - Documentation updates
+- `refactor/` - Code refactoring without behavior changes
+
+### Protected Branches
+
+The `main` branch is protected:
+- ✅ Requires pull request for **ALL** changes
+- ✅ Requires code review approval
+- ✅ Requires CI/CD to pass
+- ❌ Direct pushes are **NOT** allowed
+
+---
+
 ## Common Tasks
 
 ### Adding a New Feature
@@ -187,9 +238,22 @@ To use a prompt:
 
 1. Review package at npmjs.com and npms.io
 2. Check for install scripts: `npm show <package> scripts`
-3. Add to package.json: `npm install <package>` (local only)
+3. Create feature branch: `git checkout -b chore/add-<package-name>`
+4. Add to package.json: `npm install <package>` (local only)
+5. Commit package.json and package-lock.json together
+6. Document in commit message why dependency is needed
+7. Push to feature branch: `git push -u origin chore/add-<package-name>`
+8. Create pull request on GitHub
+
+### Updating Dependencies
+
+1. Create feature branch: `git checkout -b chore/update-dependencies`
+2. Update package.json with new versions
+3. Run `npm ci` to validate or `npm install --legacy-peer-deps` to generate new lock file
 4. Commit package.json and package-lock.json together
-5. Document in commit message why dependency is needed
+5. Document all version changes in commit message
+6. Push to feature branch: `git push -u origin chore/update-dependencies`
+7. Create pull request on GitHub
 
 ### Updating CI Workflow
 
