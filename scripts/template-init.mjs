@@ -107,10 +107,11 @@ function getDefaults() {
   // Try to read package.json
   try {
     const packageJson = JSON.parse(readFileSync(join(ROOT_DIR, 'package.json'), 'utf-8'));
-    if (packageJson.name && packageJson.name !== 'nextjs-ts-template' && packageJson.name !== 'PROJECT_NAME') {
+    // Only use package.json values if they're NOT placeholders
+    if (packageJson.name && packageJson.name !== 'PROJECT_NAME') {
       defaults.projectName = packageJson.name;
     }
-    if (packageJson.author && packageJson.author !== 'r4KK4n' && packageJson.author !== 'AUTHOR') {
+    if (packageJson.author && packageJson.author !== 'AUTHOR') {
       defaults.author = packageJson.author;
     }
   } catch (e) {
@@ -227,7 +228,7 @@ function replacePlaceholders(content, values) {
   let result = content;
 
   // Define placeholder patterns that should be replaced
-  // Using more specific patterns to avoid false positives like UNAUTHORIZED -> UNr4KK4nIZED
+  // Using word boundaries and negative lookahead to avoid false positives
   const replacements = [
     // Standard format: __PLACEHOLDER__
     { pattern: /__PROJECT_NAME__/g, value: values.projectName },
@@ -241,22 +242,15 @@ function replacePlaceholders(content, values) {
     { pattern: /__SUPPORT_EMAIL__/g, value: values.supportEmail },
     { pattern: /__SECURITY_EMAIL__/g, value: values.securityEmail },
 
-    // Legacy format - exact matches only (whole words or specific contexts)
-    // PROJECT_NAME in quotes or as standalone value
-    { pattern: /(['"])PROJECT_NAME\1/g, value: `$1${values.projectName}$1` },
-    { pattern: /^PROJECT_NAME$/gm, value: values.projectName },
-    { pattern: /:\s*PROJECT_NAME\s*$/gm, value: `: ${values.projectName}` },
+    // Legacy format - with word boundaries to avoid partial matches
+    // PROJECT_NAME: as whole word only
+    { pattern: /\bPROJECT_NAME\b/g, value: values.projectName },
     
-    // DESCRIPTION in quotes or as standalone value
-    { pattern: /(['"])DESCRIPTION\1/g, value: `$1${values.description}$1` },
-    { pattern: /^DESCRIPTION$/gm, value: values.description },
-    { pattern: /:\s*DESCRIPTION\s*$/gm, value: `: ${values.description}` },
+    // DESCRIPTION: as whole word only
+    { pattern: /\bDESCRIPTION\b/g, value: values.description },
     
-    // AUTHOR in quotes or as standalone value (but NOT in UNAUTHORIZED, AUTHOR_EMAIL, etc.)
-    { pattern: /(['"])AUTHOR\1/g, value: `$1${values.author}$1` },
-    { pattern: /^AUTHOR$/gm, value: values.author },
-    { pattern: /:\s*AUTHOR\s*$/gm, value: `: ${values.author}` },
-    { pattern: /\bAUTHOR\s*→/g, value: `${values.author} →` },
+    // AUTHOR: only as standalone word, NOT part of UNAUTHORIZED
+    { pattern: /\bAUTHOR\b(?!IZED)/g, value: values.author },
     
     // Repository patterns
     { pattern: /USERNAME\/REPO_NAME/g, value: `${values.repoOwner}/${values.repoName}` },
