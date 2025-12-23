@@ -96,8 +96,10 @@ jobs:
 
       - name: Update existing PR description
         if: steps.check-pr.outputs.pr_exists == 'true'
-        run: |
-          gh pr edit ${{ steps.check-pr.outputs.pr_number }} \
-            --body $'Production Promotion - All quality checks passed. Ready for review and merge.\n\n⚠️ Manual review and approval required before merging to production.\n\nLast checked: '$(date -u +'%Y-%m-%d %H:%M:%S UTC')
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.check-pr.outputs.pr_number }}
+        run: |
+          TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M:%S UTC')
+          gh pr edit "$PR_NUMBER" \
+            --body $'Production Promotion - All quality checks passed. Ready for review and merge.\n\n⚠️ Manual review and approval required before merging to production.\n\nLast checked: '"$TIMESTAMP"
