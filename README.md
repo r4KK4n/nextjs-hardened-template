@@ -209,6 +209,47 @@ npm run test:coverage
 npm run build
 ```
 
+## 🪝 Git Hooks (Husky)
+
+This template includes automated Git hooks for code quality checks:
+
+### Pre-Commit Hook
+
+Runs **automatically before each commit** on staged files only:
+
+```bash
+npm run lint:staged  # ESLint fixes + Prettier formatting
+npm run type-check   # TypeScript validation
+```
+
+✅ **Fast**: Only checks changed files  
+✅ **Auto-fix**: ESLint and Prettier fix issues automatically  
+✅ **Prevents bad commits**: Stops commit if checks fail
+
+### Pre-Push Hook
+
+Runs **automatically before each push** with full CI checks:
+
+```bash
+npm run type-check   # TypeScript validation
+npm run test         # Vitest tests
+npm run build        # Next.js production build
+```
+
+✅ **Safety net**: Prevents broken code from reaching main  
+✅ **Matches CI**: Same checks as GitHub Actions  
+✅ **Early feedback**: Catch issues before PR creation
+
+### Skipping Hooks (if needed)
+
+```bash
+git commit --no-verify              # Skip pre-commit hook
+git push --no-verify               # Skip pre-push hook (not recommended!)
+HUSKY=0 git commit                 # Disable Husky entirely
+```
+
+**Note:** Hooks require `npm run prepare` to be set up. This runs automatically via `npm install`.
+
 ## 🧪 Testing
 
 This template uses Vitest and React Testing Library for testing.

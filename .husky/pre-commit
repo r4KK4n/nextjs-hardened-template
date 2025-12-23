@@ -1,0 +1,10 @@
+#!/bin/bash
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Pre-commit: Fast checks on staged files only (lint, format, type-check)
+# Initialize NVM to ensure npm/node are in PATH (works from any shell/IDE)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+npm run lint:staged
+npm run type-check
