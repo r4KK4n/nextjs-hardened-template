@@ -1,35 +1,68 @@
 version: 2
 
 updates:
-  # Enable version updates for npm
-  - package-ecosystem: 'npm'
-    directory: '/'
+  # ---------------------------
+  # npm
+  # ---------------------------
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
-      interval: 'weekly'
-      day: 'monday'
-      time: '09:00'
-    open-pull-requests-limit: 10
-    reviewers:
-      - 'REVIEWER_GITHUB_USERNAME'
-    assignees:
-      - 'ASSIGNEE_GITHUB_USERNAME'
-    labels:
-      - 'dependencies'
-      - 'automerge'
-    commit-message:
-      prefix: 'chore'
-      include: 'scope'
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Berlin"
 
-  # Enable version updates for GitHub Actions
-  - package-ecosystem: 'github-actions'
-    directory: '/'
-    schedule:
-      interval: 'weekly'
-      day: 'monday'
-      time: '09:00'
-    open-pull-requests-limit: 5
+    # reduce noise by limiting open PRs
+    open-pull-requests-limit: 1
+
+    # assignees is optional (only ownership/notifications)
+    assignees:
+      - "ASSIGNEE_GITHUB_USERNAME"
+
     labels:
-      - 'dependencies'
-      - 'github-actions'
+      - "dependencies"
+      - "automerge"
+
     commit-message:
-      prefix: 'ci'
+      prefix: "chore"
+      include: "scope"
+
+    # Bundle updates -> fewer PRs
+    groups:
+      npm-production:
+        dependency-type: "production"
+        update-types: ["patch", "minor"]
+      npm-development:
+        dependency-type: "development"
+        update-types: ["patch", "minor"]
+
+    # optional: leave majors manual (more stable for fully automatic)
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # ---------------------------
+  # GitHub Actions
+  # ---------------------------
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Berlin"
+
+    open-pull-requests-limit: 1
+
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+    commit-message:
+      prefix: "ci"
+
+    # bundle everything into one PR
+    groups:
+      gha:
+        patterns:
+          - "*"
