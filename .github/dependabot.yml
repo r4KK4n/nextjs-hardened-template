@@ -4,65 +4,65 @@ updates:
   # ---------------------------
   # npm
   # ---------------------------
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Europe/Berlin"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'Europe/Berlin'
 
     # reduce noise by limiting open PRs
     open-pull-requests-limit: 1
 
     # assignees is optional (only ownership/notifications)
     assignees:
-      - "ASSIGNEE_GITHUB_USERNAME"
+      - 'ASSIGNEE_GITHUB_USERNAME'
 
     labels:
-      - "dependencies"
-      - "automerge"
+      - 'dependencies'
+      - 'automerge'
 
     commit-message:
-      prefix: "chore"
-      include: "scope"
+      prefix: 'chore'
+      include: 'scope'
 
     # Bundle updates -> fewer PRs
     groups:
       npm-production:
-        dependency-type: "production"
-        update-types: ["patch", "minor"]
+        dependency-type: 'production'
+        update-types: ['patch', 'minor']
       npm-development:
-        dependency-type: "development"
-        update-types: ["patch", "minor"]
+        dependency-type: 'development'
+        update-types: ['patch', 'minor']
 
     # optional: leave majors manual (more stable for fully automatic)
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
 
   # ---------------------------
   # GitHub Actions
   # ---------------------------
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Europe/Berlin"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'Europe/Berlin'
 
     open-pull-requests-limit: 1
 
     labels:
-      - "dependencies"
-      - "github-actions"
+      - 'dependencies'
+      - 'github-actions'
 
     commit-message:
-      prefix: "ci"
+      prefix: 'ci'
 
     # bundle everything into one PR
     groups:
       gha:
         patterns:
-          - "*"
+          - '*'
