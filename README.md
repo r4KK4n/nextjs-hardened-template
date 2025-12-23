@@ -26,8 +26,8 @@
 
 Before you begin, ensure you have the following installed:
 
-- **Node.js** >= 18.17.0
-- **npm** >= 9.0.0
+- **Node.js** >= 20.19.0
+- **npm** >= 10
 
 ```bash
 # Check versions
@@ -193,6 +193,20 @@ npm run test:coverage    # Run tests with coverage report
 # Template
 npm run template:init    # Initialize template (interactive wizard)
 npm run template:check   # Verify template initialization
+```
+
+### Code Quality (run locally to match CI)
+
+```bash
+# Install dependencies (first time or after changes)
+npm ci
+
+# Run the same checks CI runs
+npm run lint
+npm run format:check
+npm run type-check
+npm run test:coverage
+npm run build
 ```
 
 ## 🧪 Testing
