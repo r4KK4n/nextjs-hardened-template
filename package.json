@@ -17,7 +17,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "ci": "pnpm run lint && pnpm run type-check && pnpm run test",
+    "ci": "npm run lint && npm run type-check && npm run test",
     "prepare": "husky || true",
     "template:init": "node scripts/template-init.mjs",
     "template:check": "node scripts/template-check.mjs"
@@ -51,8 +51,6 @@
     "vitest": "^4.0.16"
   },
   "engines": {
-    "node": ">=20.19.0",
-    "pnpm": ">=8.0.0"
-  },
-  "packageManager": "pnpm@8.15.0"
+    "node": ">=20.19.0"
+  }
 }

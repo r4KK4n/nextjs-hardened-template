@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the security policies and best practices for managing npm/pnpm dependencies and lifecycle scripts in this project. Following these guidelines helps prevent supply-chain attacks and ensures reproducible builds.
+This document outlines the security policies and best practices for managing dependencies and lifecycle scripts in this project. The default package manager for this repository is **npm** (lockfile: `package-lock.json`). Following these guidelines helps prevent supply-chain attacks and ensures reproducible builds.
 
 ---
 
@@ -16,9 +16,9 @@ This document outlines the security policies and best practices for managing npm
 
 ### 2. **Deterministic Builds**
 
-- Use lockfiles (pnpm-lock.yaml) to ensure reproducible installs
-- Never use `npm install` or `pnpm install` without lockfile in production
-- Always use `npm ci` or `pnpm install --frozen-lockfile` in CI
+- Use lockfiles (`package-lock.json`) to ensure reproducible installs
+- Never use `npm install` without a lockfile in production
+- Always use `npm ci` in CI
 
 ### 3. **Defense in Depth**
 
@@ -32,24 +32,20 @@ This document outlines the security policies and best practices for managing npm
 
 ### ✅ Approved Commands
 
-#### Local Development
+#### Local Development (npm)
 
 ```bash
-# Recommended: Full install with prepare script (for Husky git hooks)
-pnpm install
+# Install dependencies
+npm ci
 
-# Alternative: Maximum security, manually run setup after
-pnpm install --ignore-scripts
-pnpm prepare  # Only if you need git hooks
+# If you need to re-enable Husky hooks locally
+npm run prepare
 ```
 
 #### CI/CD Environments (GitHub Actions, etc.)
 
 ```bash
-# MANDATORY: Always use frozen lockfile + ignore scripts
-pnpm install --frozen-lockfile --ignore-scripts
-
-# For npm-based projects:
+# MANDATORY: Always ignore lifecycle scripts in CI
 npm ci --ignore-scripts
 ```
 
@@ -193,7 +189,7 @@ npm install --ignore-scripts=false  # Explicitly enables scripts
 
 ```yaml
 - name: Install dependencies
-  run: pnpm install --frozen-lockfile --ignore-scripts
+   run: npm ci --ignore-scripts
 ```
 
 **Why this configuration:**
