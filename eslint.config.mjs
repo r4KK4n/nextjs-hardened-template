@@ -3,15 +3,7 @@ import typescript from 'typescript-eslint';
 
 export default [
   {
-    ignores: [
-      'node_modules',
-      '.next',
-      'dist',
-      'build',
-      'coverage',
-      '.git',
-      '.vscode',
-    ],
+    ignores: ['node_modules', '.next', 'dist', 'build', 'coverage', '.git', '.vscode'],
   },
   js.configs.recommended,
   ...typescript.configs.recommended,
@@ -57,4 +49,3 @@ export default [
     },
   },
 ];
-
