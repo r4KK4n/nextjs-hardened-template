@@ -1,0 +1,103 @@
+name: Promote main → int → prod
+
+on:
+  workflow_run:
+    workflows: ['CI']
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  promote-main-to-int:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    name: Promote main to int
+    outputs:
+      int_updated: ${{ steps.check-changes.outputs.changed }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Promote changes to int
+        run: |
+          git fetch origin main
+          git fetch origin int
+          git checkout int
+          git rebase origin/main
+          git push origin int --force-with-lease
+
+      - name: Check if changes were made
+        id: check-changes
+        run: echo "changed=true" >> $GITHUB_OUTPUT
+
+  quality-check-int:
+    needs: promote-main-to-int
+    if: needs.promote-main-to-int.outputs.int_updated == 'true'
+    uses: ./.github/workflows/reusable-ci.yml
+
+  promote-int-to-prod:
+    needs: [promote-main-to-int, quality-check-int]
+    if: success()
+    runs-on: ubuntu-latest
+    name: Create PR int → prod
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Check if PR already exists
+        id: check-pr
+        run: |
+          # Check for existing PR from int to prod
+          existing_pr=$(gh pr list \
+            --base prod \
+            --head int \
+            --json number \
+            --jq '.[0].number' 2>/dev/null || echo "")
+
+          if [ -z "$existing_pr" ]; then
+            echo "pr_exists=false" >> $GITHUB_OUTPUT
+          else
+            echo "pr_exists=true" >> $GITHUB_OUTPUT
+            echo "pr_number=$existing_pr" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create promotion PR
+        if: steps.check-pr.outputs.pr_exists == 'false'
+        run: |
+          gh pr create \
+            --base prod \
+            --head int \
+            --title "chore: promote int to prod - quality checks passed" \
+            --body $'Production Promotion - All quality checks passed. Ready for review and merge.\n\n⚠️ Manual review and approval required before merging to production.'
+
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update existing PR description
+        if: steps.check-pr.outputs.pr_exists == 'true'
+        run: |
+          gh pr edit ${{ steps.check-pr.outputs.pr_number }} \
+            --body $'Production Promotion - All quality checks passed. Ready for review and merge.\n\n⚠️ Manual review and approval required before merging to production.\n\nLast checked: '$(date -u +'%Y-%m-%d %H:%M:%S UTC')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
