@@ -177,7 +177,7 @@ Use this checklist for code reviews:
 
 ### Dependencies
 
-- [ ] No known vulnerabilities (pnpm audit)
+- [ ] No known vulnerabilities (npm audit)
 - [ ] Dependencies up to date
 - [ ] Minimal dependencies
 - [ ] Trusted sources only
@@ -202,14 +202,14 @@ We will respond within 48 hours.
 ### Dependency Scanning
 
 ```bash
-pnpm audit
-pnpm audit fix
+npm audit
+npm audit fix
 ```
 
 ### ESLint Security
 
 ```bash
-pnpm add -D eslint-plugin-security
+npm install --save-dev eslint-plugin-security
 ```
 
 ### TypeScript

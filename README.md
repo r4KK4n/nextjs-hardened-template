@@ -332,15 +332,15 @@ FROM node:18-alpine AS base
 # Install dependencies only when needed
 FROM base AS deps
 WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
+COPY package*.json ./
+RUN npm ci --ignore-scripts
 
 # Build
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm install -g pnpm && pnpm build
+RUN npm run build
 
 # Production
 FROM base AS runner

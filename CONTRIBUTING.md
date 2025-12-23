@@ -38,9 +38,9 @@ Feature requests are welcome! Use the feature request template and include:
 5. **Update documentation** if needed
 6. **Run quality checks**:
    ```bash
-   pnpm lint
-   pnpm type-check
-   pnpm test
+   npm run lint
+   npm run type-check
+   npm run test
    ```
 7. **Commit using conventional commits**:
    ```
@@ -57,19 +57,17 @@ Feature requests are welcome! Use the feature request template and include:
 git clone https://github.com/YOUR_USERNAME/REPO_NAME.git
 cd REPO_NAME
 
-# Install dependencies
-# For local development (executes git hooks setup):
-pnpm install
+# Install dependencies (deterministic)
+npm ci
 
-# For maximum security (skip all lifecycle scripts):
-# pnpm install --ignore-scripts
-# pnpm prepare  # manually run to set up git hooks
+# If you need to re-enable Husky hooks locally
+npm run prepare
 
 # Set up environment
 cp .env.example .env
 
 # Start development
-pnpm dev
+npm run dev
 ```
 
 ## Project Structure
