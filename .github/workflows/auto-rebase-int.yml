@@ -1,0 +1,40 @@
+name: Auto Rebase Int
+
+# DISABLED BY DEFAULT - Change 'false' to 'true' in line 20 to enable
+on:
+  push:
+    branches: [main]
+  workflow_run:
+    workflows: ['CI']
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  rebase-int:
+    name: Rebase int branch
+    runs-on: ubuntu-latest
+    if: ${{ false && (github.event.workflow_run.conclusion == 'success' || github.event_name == 'push') }}
+    # Change 'false' to 'true' above to activate
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Rebase int on main
+        run: |
+          git fetch origin main
+          git fetch origin int
+          git checkout int
+          git rebase origin/main
+          git push origin int --force-with-lease
