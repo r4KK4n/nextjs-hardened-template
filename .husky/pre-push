@@ -1,0 +1,12 @@
+#!/bin/bash
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Pre-push: Full CI checks (match GitHub Actions workflow)
+# Initialize NVM to ensure npm/node are in PATH (works from any shell/IDE)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+echo "Running pre-push checks (types → tests → build)..."
+npm run type-check
+npm run test
+npm run build
