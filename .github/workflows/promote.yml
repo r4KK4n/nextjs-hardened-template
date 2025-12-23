@@ -102,4 +102,4 @@ jobs:
         run: |
           TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M:%S UTC')
           gh pr edit "$PR_NUMBER" \
-            --body $'Production Promotion - All quality checks passed. Ready for review and merge.\n\n⚠️ Manual review and approval required before merging to production.\n\nLast checked: '"$TIMESTAMP"
+            --body $'Production Promotion - All quality checks passed. Ready for review and merge.\n\n⚠️ Manual review and approval required before merging to production!\n\nLast checked: '"$TIMESTAMP"
